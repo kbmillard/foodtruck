@@ -76,7 +76,7 @@ Copy `.env.example` to `.env.local` and fill as needed:
 - **`NEXT_PUBLIC_LOCATIONS_CSV_URL`** — Optional alternate (read server-side in `get-locations.ts`); same CSV shape as the template.
 - **`GOOGLE_MAPS_SERVER_KEY`** — Private key for **Google Geocoding API** (server only). Preferred over `GOOGLE_MAPS_API_KEY` for geocoding.
 - **`GOOGLE_MAPS_API_KEY`** — Alternate private key name accepted for geocoding if `GOOGLE_MAPS_SERVER_KEY` is unset.
-- **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** — Browser-safe key for **Maps Embed API** (`/embed/v1/place`) and client-side embed fallbacks. Optional for geocoding only as a last resort if no private key exists; prefer a **server** key for Geocoding.
+- **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** — Browser-safe key for **Maps JavaScript API** (Find the Truck maps use `gestureHandling: greedy` so scroll zoom works without ⌘/Ctrl) and for **Maps Embed API** fallbacks when needed. In Google Cloud, enable **Maps JavaScript API** and **Maps Embed API** (and Geocoding on the server key). Optional for geocoding only as a last resort if no private key exists; prefer a **server** key for Geocoding.
 - **`NEXT_PUBLIC_CLOVER_PUBLIC_TOKEN_SANDBOX`** — Clover public / PAKMS-style key for sandbox.
 - **`NEXT_PUBLIC_CLOVER_MERCHANT_ID_SANDBOX`** — Clover merchant ID for sandbox.
 - **`NEXT_PUBLIC_CLOVER_ENV`** — `sandbox` or `production`.

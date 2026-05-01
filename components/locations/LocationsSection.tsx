@@ -13,6 +13,7 @@ import {
   resolvedMapsUrl,
   telHrefFromDisplay,
 } from "@/lib/locations/helpers";
+import { GoogleMapGreedy } from "@/components/locations/GoogleMapGreedy";
 
 function cardDescription(loc: LocationItem): string {
   const note = loc.statusNote?.trim();
@@ -225,8 +226,18 @@ function LocationCard({ loc }: { loc: LocationItem }) {
 }
 
 function MapEmbedBlock({ loc }: { loc: LocationItem }) {
-  const src = resolvedEmbedSrc(loc);
   const line = formatAddressLine(loc);
+  const ownerEmbed = loc.embedUrl?.trim();
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
+  const coordsOk =
+    loc.lat != null &&
+    loc.lng != null &&
+    Number.isFinite(loc.lat) &&
+    Number.isFinite(loc.lng);
+
+  /** Maps JS API supports gestureHandling: greedy (no ⌘+scroll overlay). Embed API iframes do not. */
+  const useGreedyJsMap = !ownerEmbed && coordsOk && Boolean(apiKey);
+  const src = useGreedyJsMap ? null : resolvedEmbedSrc(loc);
 
   return (
     <div>
@@ -234,7 +245,16 @@ function MapEmbedBlock({ loc }: { loc: LocationItem }) {
         {loc.label?.trim() || loc.name}
       </p>
       <p className="mt-1 text-sm text-cream/80">{line}</p>
-      {src ? (
+      {useGreedyJsMap && loc.lat != null && loc.lng != null ? (
+        <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
+          <GoogleMapGreedy
+            lat={loc.lat}
+            lng={loc.lng}
+            title={loc.name}
+            className="h-[220px] w-full min-h-[220px] bg-charcoal"
+          />
+        </div>
+      ) : src ? (
         <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
           <iframe
             title={`Map — ${loc.name}`}
