@@ -8,6 +8,10 @@ import { useLocationPublicStatus } from "@/lib/locations/use-location-public-sta
 
 const devStatusLoggedIds = new Set<string>();
 
+function labelColorClass(isOpen: boolean): string {
+  return isOpen ? "text-accent-green" : "text-salsa";
+}
+
 export type LocationPublicStatusProps = {
   location: LocationItem;
   className?: string;
@@ -65,7 +69,9 @@ export function LocationPublicStatus({
           <p className="font-display text-3xl text-cream/50">Checking hours…</p>
         ) : (
           <>
-            <p className="font-display text-3xl text-cream">{publicStatus.label}</p>
+            <p className={clsx("font-display text-3xl", labelColorClass(publicStatus.isOpen))}>
+              {publicStatus.label}
+            </p>
             {publicStatus.detail ? (
               <p className="mt-2 max-w-xl text-lg font-normal leading-snug text-cream/80">
                 {publicStatus.detail}
@@ -88,7 +94,9 @@ export function LocationPublicStatus({
             <span className="text-cream/50">Checking hours…</span>
           ) : (
             <>
-              <span className="font-semibold text-accent-green">{publicStatus.label}</span>
+              <span className={clsx("font-semibold", labelColorClass(publicStatus.isOpen))}>
+                {publicStatus.label}
+              </span>
               {publicStatus.detail ? <span> · {publicStatus.detail}</span> : null}
             </>
           )}
@@ -105,7 +113,9 @@ export function LocationPublicStatus({
           <span className="text-cream/50">Checking hours…</span>
         ) : (
           <>
-            <span className="font-semibold text-accent-green">{publicStatus.label}</span>
+            <span className={clsx("font-semibold", labelColorClass(publicStatus.isOpen))}>
+              {publicStatus.label}
+            </span>
             {publicStatus.detail ? <span className="text-cream/80"> · {publicStatus.detail}</span> : null}
           </>
         )}
