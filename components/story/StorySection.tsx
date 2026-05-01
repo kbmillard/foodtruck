@@ -17,7 +17,7 @@ const STORY_SLIDES: StorySlide[] = [
   {
     src: "/images/story/original-storefront.jpg",
     alt: "Original La Hamburguesa Loca storefront with orange sign and neon Open — where the story began in Kansas City.",
-    lineEs: "Donde comenzó la historia",
+    lineEs: "Dónde comenzó la historia",
     lineEn: "where the story began",
   },
   {
