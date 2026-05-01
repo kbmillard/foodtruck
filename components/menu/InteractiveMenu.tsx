@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MENU_CATEGORY_META } from "@/lib/menu/category-meta";
 import type { MenuItem } from "@/lib/menu/schema";
 import { useMenuCatalog } from "@/context/MenuCatalogContext";
@@ -42,6 +43,10 @@ function PriceRow({ name, price }: { name: string; price: number | null }) {
 export function InteractiveMenu() {
   const { data, loading, error } = useMenuCatalog();
   const { addItem, openOrderPanel, scrollToSection } = useOrder();
+  const reduceMotion = useReducedMotion();
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
+  const activeIdRef = useRef(MENU_CATEGORY_META[0]!.id);
+  const [swipeCueDismissed, setSwipeCueDismissed] = useState(false);
   const [activeId, setActiveId] = useState(MENU_CATEGORY_META[0]!.id);
   const [meatItem, setMeatItem] = useState<MenuItem | null>(null);
   const [optionsItem, setOptionsItem] = useState<MenuItem | null>(null);
@@ -52,6 +57,10 @@ export function InteractiveMenu() {
       data.items.some((i) => i.category.toLowerCase() === m.label.toLowerCase()),
     );
   }, [data]);
+
+  useEffect(() => {
+    activeIdRef.current = activeId;
+  }, [activeId]);
 
   useEffect(() => {
     if (!visibleMeta.length) return;
@@ -95,12 +104,25 @@ export function InteractiveMenu() {
     setOptionsItem(null);
   };
 
+  const onCategoryScroll = useCallback(() => {
+    const el = categoryScrollRef.current;
+    if (!el || swipeCueDismissed) return;
+    if (el.scrollLeft > 8) setSwipeCueDismissed(true);
+  }, [swipeCueDismissed]);
+
+  const selectCategory = useCallback((id: string) => {
+    if (activeIdRef.current !== id) setSwipeCueDismissed(true);
+    setActiveId(id);
+  }, []);
+
+  const showSwipeCue = !swipeCueDismissed && visibleMeta.length > 1;
+
   return (
     <section
       id="menu"
       className="scroll-mt-[calc(var(--nav-h)+12px)] border-t border-white/10 bg-gradient-to-b from-menu-plum via-plum to-charcoal py-24"
     >
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+      <div className="mx-auto min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
         <SectionHeading
           kicker="Menu"
           title="Auténtico Sazón Mexicano — one interactive board."
@@ -116,13 +138,42 @@ export function InteractiveMenu() {
         {loading || !data ? (
           <MenuSkeleton />
         ) : (
-          <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
-            <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible">
-              {visibleMeta.map((cat) => (
+          <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+            <div className="min-w-0">
+              <div
+                className={cn(
+                  "mb-2 flex items-center justify-end gap-2 lg:hidden",
+                  !showSwipeCue && "hidden",
+                )}
+                aria-hidden
+              >
+                <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-editorial text-cream/55">
+                  <ChevronLeft className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden />
+                  Swipe for more
+                  <motion.span
+                    className="inline-flex"
+                    animate={reduceMotion ? false : { x: [0, 5, 0] }}
+                    transition={
+                      reduceMotion
+                        ? { duration: 0 }
+                        : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
+                    }
+                  >
+                    <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden />
+                  </motion.span>
+                </span>
+              </div>
+              <div className="relative min-w-0">
+                <div
+                  ref={categoryScrollRef}
+                  onScroll={onCategoryScroll}
+                  className="flex gap-3 overflow-x-auto overflow-y-hidden pb-2 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+                >
+                  {visibleMeta.map((cat) => (
                 <button
                   key={cat.id}
                   type="button"
-                  onClick={() => setActiveId(cat.id)}
+                  onClick={() => selectCategory(cat.id)}
                   className={cn(
                     "flex min-w-[220px] items-baseline justify-between rounded-2xl border px-4 py-4 text-left transition lg:min-w-0",
                     active?.id === cat.id
@@ -133,7 +184,15 @@ export function InteractiveMenu() {
                   <span className="font-display text-3xl">{cat.number}</span>
                   <span className="pl-4 text-xs uppercase tracking-editorial">{cat.label}</span>
                 </button>
-              ))}
+                  ))}
+                </div>
+                {showSwipeCue ? (
+                  <div
+                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-menu-plum from-[18%] to-transparent lg:hidden"
+                    aria-hidden
+                  />
+                ) : null}
+              </div>
             </div>
 
             <AnimatePresence mode="wait">
