@@ -1,0 +1,3 @@
+id,active,type,sortOrder,name,label,address,city,state,zip,hours,phone,email,status,statusNote,mapsUrl,embedUrl,lat,lng,lastUpdated
+restaurant-southwest-blvd,TRUE,restaurant,0,La Hamburguesa Loca,Restaurant Location,904 Southwest Blvd,Kansas City,MO,64108,"Open 5:00 PM - 11:00 PM",(816) 589-8925,lahamburguesaloca@yahoo.com,Open,Permanent restaurant location,,,,,
+food-truck-independence-ave,TRUE,food_truck,1,La Hamburguesa Loca Food Truck,Food Truck Location,3009 Independence Ave,Kansas City,MO,64124,"Open 5:00 PM - 11:00 PM",(816) 589-8925,lahamburguesaloca@yahoo.com,Open,At Al Halal Grocery Store,,,,,
