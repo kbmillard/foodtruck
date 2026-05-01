@@ -49,7 +49,7 @@ function PriceRow({ name, price }: { name: string; price: number | null }) {
 
 export function InteractiveMenu() {
   const { data, loading, error } = useMenuCatalog();
-  const { addItem, openOrderPanel, scrollToSection } = useOrder();
+  const { addItem, openOrderPanel } = useOrder();
   const reduceMotion = useReducedMotion();
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const activeIdRef = useRef(MENU_CATEGORY_META[0]!.id);
@@ -322,21 +322,6 @@ export function InteractiveMenu() {
             </div>
           </div>
         )}
-
-        {!loading && data ? (
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
-            <p className="max-w-xl text-center text-sm text-cream/75">
-              Weekend breakfast available Saturday &amp; Sunday, 8 AM - 4 PM.
-            </p>
-            <button
-              type="button"
-              onClick={() => scrollToSection("weekend-breakfast")}
-              className="rounded-full border border-accent-orange/50 bg-accent-orange/15 px-5 py-2 text-[10px] font-semibold uppercase tracking-editorial text-cream hover:bg-accent-orange/25"
-            >
-              View Weekend Breakfast
-            </button>
-          </div>
-        ) : null}
 
         <WeekendBreakfastSection />
       </div>
