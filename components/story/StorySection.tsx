@@ -1,10 +1,52 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
+/** Slideshow order: original storefront, then family at current location (source: `la_hamburguesa_loca_web_assets`). */
+const STORY_SLIDES = [
+  {
+    src: "/images/story/original-storefront.jpg",
+    alt: "Original La Hamburguesa Loca storefront with orange sign and neon Open — Kansas City roots.",
+    caption: "Where the story grew",
+  },
+  {
+    src: "/images/story/family-team.jpg",
+    alt: "La Hamburguesa Loca family and team in front of the Taqueria on Southwest Blvd.",
+    caption: "Family-owned today",
+  },
+] as const;
+
+const AUTO_ADVANCE_MS = 5000;
+/** First-slide Ken Burns: start slightly zoomed in, ease out to 1 over one full slide beat. */
+const FIRST_SLIDE_ZOOM_S = 5.25;
+
 export function StorySection() {
+  const prefersReducedMotion = useReducedMotion();
+  const [index, setIndex] = useState(0);
+  const [storefrontZoomKey, setStorefrontZoomKey] = useState(0);
+  const prevIndexRef = useRef(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % STORY_SLIDES.length);
+    }, AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    const prev = prevIndexRef.current;
+    if (index === 0 && prev === 1) {
+      setStorefrontZoomKey((k) => k + 1);
+    }
+    prevIndexRef.current = index;
+  }, [index]);
+
+  const fadeDuration = prefersReducedMotion ? 0 : 1.15;
+
   return (
     <section
       id="story"
@@ -29,25 +71,85 @@ export function StorySection() {
             show.
           </p>
         </motion.div>
+
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.65 }}
-          className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10"
+          className="relative mx-auto w-full max-w-lg lg:mx-0 lg:max-w-none"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80"
-            alt="Family-style Mexican dinner spread — storytelling imagery for La Hamburguesa Loca"
-            fill
-            className="object-cover"
-            sizes="(min-width: 1024px) 560px, 100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 to-transparent" />
-          <p className="absolute bottom-6 left-6 right-6 text-sm text-cream/85">
-            Community-rooted, energetic, and still personal — the same hospitality whether you meet
-            us through the pickup window or at the truck.
-          </p>
+          <div
+            className="relative aspect-[4/5] w-full overflow-hidden rounded-3xl border border-white/10 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.55)]"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="La Hamburguesa Loca family and history"
+          >
+            {STORY_SLIDES.map((slide, i) => (
+              <motion.div
+                key={slide.src}
+                className="absolute inset-0"
+                initial={false}
+                animate={{
+                  opacity: i === index ? 1 : 0,
+                }}
+                transition={{
+                  duration: fadeDuration,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                aria-hidden={i !== index}
+              >
+                {i === 0 && !prefersReducedMotion ? (
+                  <motion.div
+                    key={storefrontZoomKey}
+                    className="absolute inset-0 h-full w-full"
+                    initial={{ scale: 1.1 }}
+                    animate={{ scale: index === 0 ? 1 : 1.08 }}
+                    transition={{
+                      duration: index === 0 ? FIRST_SLIDE_ZOOM_S : 0.35,
+                      ease: index === 0 ? [0.12, 0.82, 0.24, 1] : [0.4, 0, 0.2, 1],
+                    }}
+                  >
+                    <Image
+                      src={slide.src}
+                      alt={slide.alt}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 560px, 100vw"
+                      priority
+                    />
+                  </motion.div>
+                ) : (
+                  <Image
+                    src={slide.src}
+                    alt={slide.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 560px, 100vw"
+                    priority={i === 0}
+                  />
+                )}
+              </motion.div>
+            ))}
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/20 to-transparent"
+              aria-hidden
+            />
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={STORY_SLIDES[index]!.caption}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: "easeOut" }}
+                  className="inline-block rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[10px] font-medium uppercase tracking-editorial text-cream/90 backdrop-blur-sm"
+                >
+                  {STORY_SLIDES[index]!.caption}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
