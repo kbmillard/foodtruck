@@ -43,32 +43,10 @@ export function Prologue() {
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
-          kicker="Prologue"
           title="Quiet confidence. Loud flavors."
           subtitle="La Hamburguesa Loca is a sixteen-year, family-owned Mexican kitchen in Kansas City — grown from a beloved food truck into a dual rhythm: a dependable restaurant on Southwest Blvd and a truck that still rolls for late-night crowds."
           align="center"
         />
-
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto mt-10 flex flex-col items-center sm:mt-12"
-        >
-          <div className="relative aspect-square w-[min(9.5rem,42vw)] max-w-[160px] sm:w-40">
-            <Image
-              src={LOGO}
-              alt="La Hamburguesa Loca — circular logo with LHL mark"
-              fill
-              className="object-contain drop-shadow-[0_12px_36px_rgba(0,0,0,0.65)]"
-              sizes="(max-width: 640px) 152px, 160px"
-            />
-          </div>
-          <p className="mt-7 text-center text-[10px] uppercase tracking-editorial text-cream/70">
-            Family-owned in KC
-          </p>
-        </motion.div>
 
         <motion.ul
           initial="hidden"
@@ -78,7 +56,7 @@ export function Prologue() {
             hidden: {},
             show: { transition: { staggerChildren: 0.06 } },
           }}
-          className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:mt-14"
+          className="mt-12 grid gap-4 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3"
         >
           {STATS.map((s) => (
             <motion.li
