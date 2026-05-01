@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CONTACT } from "@/lib/data/locations";
+import { scrollDocumentToAnchor } from "@/lib/utils/scroll-to-anchor";
 
 const initial = {
   name: "",
@@ -28,14 +29,16 @@ export function CateringSection() {
   return (
     <section
       id="catering"
-      className="scroll-mt-[calc(var(--nav-h)+12px)] border-t border-white/10 py-24"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 py-24"
     >
       <div className="mx-auto max-w-[1100px] px-5 sm:px-8">
-        <SectionHeading
-          kicker="Catering & private events"
-          title="Bring the truck — bring the party."
-          subtitle="Birthdays, corporate events, school celebrations, festivals, and community gatherings deserve more than lukewarm trays. La Hamburguesa Loca rolls in with mesquite energy, late-night discipline, and a menu built for lines that move."
-        />
+        <div id="catering-start" tabIndex={-1} className="outline-none focus:outline-none">
+          <SectionHeading
+            kicker="Catering & private events"
+            title="Bring the truck — bring the party."
+            subtitle="Birthdays, corporate events, school celebrations, festivals, and community gatherings deserve more than lukewarm trays. La Hamburguesa Loca rolls in with mesquite energy, late-night discipline, and a menu built for lines that move."
+          />
+        </div>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1.1fr]">
           <motion.div
@@ -69,24 +72,14 @@ export function CateringSection() {
               <button
                 type="button"
                 className="rounded-full bg-salsa px-5 py-2 text-[10px] font-semibold uppercase tracking-editorial text-cream"
-                onClick={() =>
-                  document.getElementById("catering-form")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  })
-                }
+                onClick={() => scrollDocumentToAnchor("catering-form")}
               >
                 Book the truck
               </button>
               <button
                 type="button"
                 className="rounded-full border border-white/15 px-5 py-2 text-[10px] uppercase tracking-editorial text-cream hover:bg-white/5"
-                onClick={() =>
-                  document.getElementById("catering-form")?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  })
-                }
+                onClick={() => scrollDocumentToAnchor("catering-form")}
               >
                 Start your booking
               </button>

@@ -120,14 +120,16 @@ export function InteractiveMenu() {
   return (
     <section
       id="menu"
-      className="scroll-mt-[calc(var(--nav-h)+12px)] border-t border-white/10 bg-gradient-to-b from-menu-plum via-plum to-charcoal py-24"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-gradient-to-b from-menu-plum via-plum to-charcoal py-24"
     >
       <div className="mx-auto min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
-        <SectionHeading
-          kicker="Menu"
-          title="Auténtico Sazón Mexicano — one interactive board."
-          subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
-        />
+        <div id="menu-start" tabIndex={-1} className="outline-none focus:outline-none">
+          <SectionHeading
+            kicker="Menu"
+            title="Auténtico Sazón Mexicano — one interactive board."
+            subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
+          />
+        </div>
 
         {error ? (
           <p className="mt-6 rounded-xl border border-salsa/40 bg-salsa/10 p-4 text-sm text-cream">

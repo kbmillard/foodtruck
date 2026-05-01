@@ -99,8 +99,12 @@ export function EditorialNav() {
   }, [open]);
 
   const go = (id: string) => {
-    scrollToSection(id);
     setOpen(false);
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        scrollToSection(id);
+      });
+    });
   };
 
   const openOrderFromMenu = () => {

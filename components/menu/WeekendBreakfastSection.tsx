@@ -121,10 +121,14 @@ export function WeekendBreakfastSection() {
   return (
     <div
       id="weekend-breakfast"
-      className="scroll-mt-[calc(var(--nav-h)+12px)] w-full max-w-full overflow-x-hidden border-t border-accent-orange/30 bg-gradient-to-b from-accent-orange/[0.07] via-menu-plum/45 to-charcoal py-12 md:from-accent-orange/15 md:via-menu-plum md:to-charcoal md:py-20"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] w-full max-w-full overflow-x-hidden border-t border-accent-orange/30 bg-gradient-to-b from-accent-orange/[0.07] via-menu-plum/45 to-charcoal py-12 md:from-accent-orange/15 md:via-menu-plum md:to-charcoal md:py-20"
     >
       <div className="mx-auto w-full max-w-full px-4 sm:px-5 md:px-8">
-        <div className="w-full min-w-0 max-w-full rounded-2xl border border-accent-orange/40 bg-black/40 p-4 sm:p-5 md:rounded-3xl md:p-10">
+        <div
+          id="weekend-breakfast-start"
+          tabIndex={-1}
+          className="w-full min-w-0 max-w-full rounded-2xl border border-accent-orange/40 bg-black/40 p-4 outline-none focus:outline-none sm:p-5 md:rounded-3xl md:p-10"
+        >
           <p className="text-xs uppercase tracking-editorial text-accent-orange">
             Weekend Breakfast
           </p>

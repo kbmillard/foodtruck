@@ -8,7 +8,7 @@ export function StorySection() {
   return (
     <section
       id="story"
-      className="scroll-mt-[calc(var(--nav-h)+12px)] border-t border-white/10 bg-tortilla/10 py-24"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-tortilla/10 py-24"
     >
       <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-5 sm:px-8 lg:grid-cols-2">
         <motion.div

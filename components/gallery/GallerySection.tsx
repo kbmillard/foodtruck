@@ -32,7 +32,10 @@ const SHOTS = [
 
 export function GallerySection() {
   return (
-    <section id="gallery" className="border-t border-white/10 py-24">
+    <section
+      id="gallery"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 py-24"
+    >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <SectionHeading
           kicker="Gallery"

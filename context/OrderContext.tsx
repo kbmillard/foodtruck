@@ -14,6 +14,7 @@ import {
   selectionsKey,
 } from "@/lib/menu/option-groups";
 import { useMenuCatalog } from "@/context/MenuCatalogContext";
+import { resolveAnchorScrollId, scrollDocumentToAnchor } from "@/lib/utils/scroll-to-anchor";
 import type {
   CartLine,
   CustomerInfo,
@@ -74,7 +75,7 @@ type OrderContextValue = {
   canOpenPayment: boolean;
   canSendOrderRequest: boolean;
   openOrderPanel: () => void;
-  scrollToSection: (id: string) => void;
+  scrollToSection: (id: string, options?: { offset?: number }) => void;
   focusMenu: () => void;
   focusCatering: () => void;
   /** Clover checkout — requires all lines priced */
@@ -259,21 +260,16 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
     setOrderDrawerOpen(true);
   }, []);
 
-  const scrollToSection = useCallback((id: string) => {
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToSection = useCallback((id: string, options?: { offset?: number }) => {
+    scrollDocumentToAnchor(resolveAnchorScrollId(id), options);
   }, []);
 
   const focusMenu = useCallback(() => {
     scrollToSection("menu");
-    const panel = document.getElementById("menu-panel");
-    panel?.focus();
   }, [scrollToSection]);
 
   const focusCatering = useCallback(() => {
     scrollToSection("catering");
-    const form = document.getElementById("catering-form");
-    form?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [scrollToSection]);
 
   const submitOrderRequest = useCallback(async () => {

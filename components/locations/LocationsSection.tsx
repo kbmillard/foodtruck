@@ -49,14 +49,16 @@ export function LocationsSection() {
   return (
     <section
       id="locations"
-      className="scroll-mt-[calc(var(--nav-h)+12px)] border-t border-white/10 py-24"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 py-24"
     >
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
-        <SectionHeading
-          kicker="Find us"
-          title="Restaurant as home base. Truck as heartbeat."
-          subtitle="The best Mexican burger in Kansas City lives alongside tacos, birria, and papas locas — on Southwest Blvd and rolling as a KC food truck."
-        />
+        <div id="locations-start" tabIndex={-1} className="outline-none focus:outline-none">
+          <SectionHeading
+            kicker="Find us"
+            title="Restaurant as home base. Truck as heartbeat."
+            subtitle="The best Mexican burger in Kansas City lives alongside tacos, birria, and papas locas — on Southwest Blvd and rolling as a KC food truck."
+          />
+        </div>
 
         {error ? (
           <p className="mt-6 rounded-xl border border-salsa/40 bg-salsa/10 p-4 text-sm text-cream">
@@ -87,7 +89,7 @@ export function LocationsSection() {
 
         <div
           id="hours"
-          className="mt-12 scroll-mt-[calc(var(--nav-h)+12px)] rounded-3xl border border-white/10 bg-black/30 p-8"
+          className="mt-12 scroll-mt-[calc(var(--nav-h)+16px)] rounded-3xl border border-white/10 bg-black/30 p-8"
         >
           <p className="text-xs uppercase tracking-editorial text-cream/60">Hours</p>
           <ul className="mt-3 space-y-2 text-cream/85">
