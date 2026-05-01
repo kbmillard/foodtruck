@@ -18,7 +18,7 @@ const CHILAQUILES_SAUCE: NonNullable<MenuItem["optionGroups"]> = [
   },
 ];
 
-const AVAIL = "Saturday & Sunday, 8 AM - 4 PM";
+const AVAIL = "Saturday & Sunday";
 
 function guiso(
   id: string,

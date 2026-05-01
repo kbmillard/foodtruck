@@ -19,11 +19,11 @@ export const DEFAULT_WEEKLY_HOURS: WeeklyHours = {
   thu: [{ open: "17:00", close: "23:00", label: "Regular Menu" }],
   fri: [{ open: "17:00", close: "23:00", label: "Regular Menu" }],
   sat: [
-    { open: "08:00", close: "16:00", label: "Weekend Breakfast" },
+    { open: "08:00", close: "16:00", label: "Desayuno de Fin de Semana" },
     { open: "17:00", close: "23:00", label: "Regular Menu" },
   ],
   sun: [
-    { open: "08:00", close: "16:00", label: "Weekend Breakfast" },
+    { open: "08:00", close: "16:00", label: "Desayuno de Fin de Semana" },
     { open: "17:00", close: "23:00", label: "Regular Menu" },
   ],
 };

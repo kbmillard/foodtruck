@@ -26,23 +26,6 @@ const SUBSECTIONS: { section: string; title: string; kicker: string; blurb?: str
 
 const PANEL_COLORS: MenuCategoryColor[] = ["orange", "yellow", "red"];
 
-/** Display-only shortening for narrow screens; does not change Sheet data. */
-function availabilityMobileDisplay(label: string): string {
-  const t = label.trim();
-  if (
-    /saturday\s*&\s*sunday|saturday\s+and\s+sunday/i.test(t) &&
-    /\b8\b.*\b4\b.*(am|pm)/i.test(t)
-  ) {
-    return "Sat–Sun · 8 AM–4 PM";
-  }
-  return t
-    .replace(/\bSaturday\b/gi, "Sat")
-    .replace(/\bSunday\b/gi, "Sun")
-    .replace(/\s*&\s*/g, "–")
-    .replace(/\s*,\s*/g, " · ")
-    .replace(/\s*-\s*/g, "–");
-}
-
 function BreakfastPriceRow({ name, price }: { name: string; price: number | null }) {
   const priceStr = price === null ? "Price TBD" : `$${price.toFixed(2)}`;
   return (
@@ -179,19 +162,15 @@ export function WeekendBreakfastSection() {
           tabIndex={-1}
           className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/40 p-4 outline-none focus:outline-none sm:p-5 md:rounded-3xl md:p-10"
         >
-          <p className="text-xs uppercase tracking-editorial text-cream/60">
-            Weekend Breakfast
+          <p className="text-xs tracking-editorial text-cream/60">
+            Desayuno de Fin de Semana
           </p>
           <h2 className="mt-2 font-display text-3xl text-cream sm:text-4xl md:text-5xl">
-            Weekend Breakfast
+            Desayuno de Fin de Semana
           </h2>
-          <p className="mt-2 text-sm text-cream/80 md:hidden">Sat–Sun · 8 AM–4 PM</p>
-          <p className="mt-2 hidden text-sm text-cream/80 sm:text-base md:block">
-            Saturday &amp; Sunday, 8 AM - 4 PM
-          </p>
           <p className="mt-3 max-w-full text-sm leading-relaxed text-cream/70 md:max-w-2xl">
-            Weekend breakfast available Saturday &amp; Sunday, 8 AM - 4 PM. All prices confirmed at
-            pickup — add to cart to send an order request.
+            Available Saturday &amp; Sunday. All prices confirmed at pickup — add to cart to send
+            an order request.
           </p>
 
           {activeMeta ? (
@@ -272,7 +251,7 @@ export function WeekendBreakfastSection() {
                         <h3 className="mt-2 font-display text-4xl text-cream">{activeMeta.title}</h3>
                         <p className="mt-4 text-sm leading-relaxed text-cream/75 sm:text-base">
                           {activeMeta.blurb ??
-                            "Saturday & Sunday, 8 AM – 4 PM. Tap items on the right — choices open when required. Final price confirmed at pickup when not listed."}
+                            "Tap items on the right — choices open when required. Final price confirmed at pickup when not listed."}
                         </p>
                         <div
                           className={cn(
@@ -321,14 +300,6 @@ export function WeekendBreakfastSection() {
                                 {item.englishName ? (
                                   <p className="mt-0.5 break-words text-xs text-cream/55">
                                     {item.englishName}
-                                  </p>
-                                ) : null}
-                                {item.availabilityLabel ? (
-                                  <p className="mt-1 max-w-full break-words text-[10px] uppercase leading-snug text-cream/70 md:tracking-editorial">
-                                    <span className="md:hidden">
-                                      {availabilityMobileDisplay(item.availabilityLabel)}
-                                    </span>
-                                    <span className="hidden md:inline">{item.availabilityLabel}</span>
                                   </p>
                                 ) : null}
                                 {item.meatChoiceRequired ? (

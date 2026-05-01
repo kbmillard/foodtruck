@@ -40,7 +40,10 @@ assert(s.label === "Closed" && s.detail.includes("5:00 PM"), `Tue 2:28 AM: got $
 // Saturday 10:30 AM CDT (2025-05-03 15:30 UTC ≈ 10:30 CDT)
 const satMorning = new Date("2025-05-03T15:30:00.000Z");
 s = getLocationPublicStatus(base, satMorning);
-assert(s.label === "Open" && s.detail.includes("Weekend Breakfast"), `Sat 10:30 AM: got ${JSON.stringify(s)}`);
+assert(
+  s.label === "Open" && s.detail.includes("Desayuno de Fin de Semana"),
+  `Sat 10:30 AM: got ${JSON.stringify(s)}`,
+);
 
 // Saturday 4:30 PM CDT (2025-05-03 21:30 UTC)
 const satGap = new Date("2025-05-03T21:30:00.000Z");

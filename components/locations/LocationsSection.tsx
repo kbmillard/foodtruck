@@ -92,8 +92,8 @@ export function LocationsSection() {
         >
           <p className="text-xs uppercase tracking-editorial text-cream/60">Hours</p>
           <p className="mt-2 text-xs text-cream/50">
-            Open/closed badges use Kansas City time (America/Chicago), including weekend breakfast
-            and evening windows.
+            Open/closed badges use Kansas City time (America/Chicago), including desayuno de fin de
+            semana and evening windows.
           </p>
           <ul className="mt-3 space-y-2 text-cream/85">
             {!loading && data?.locations.length
