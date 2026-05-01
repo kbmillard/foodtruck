@@ -29,33 +29,64 @@ export function Prologue() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto mt-10 flex w-full max-w-sm flex-col items-center sm:mt-12 sm:max-w-md"
+          className="relative mx-auto mt-10 w-full max-w-sm sm:mt-12 sm:max-w-lg"
         >
+          {/* Bloom outside the single panel — not a second card */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-[radial-gradient(ellipse_85%_70%_at_50%_35%,rgba(196,30,30,0.28),transparent_62%),radial-gradient(ellipse_90%_65%_at_50%_100%,rgba(36,19,45,0.55),transparent_68%)] opacity-95 blur-2xl sm:-inset-10"
+            className="pointer-events-none absolute -inset-8 rounded-[2.25rem] bg-[radial-gradient(ellipse_75%_60%_at_50%_42%,rgba(196,30,30,0.22),transparent_65%),radial-gradient(ellipse_85%_55%_at_50%_85%,rgba(36,19,45,0.45),transparent_70%)] opacity-90 blur-3xl sm:-inset-12"
           />
-          <div className="relative z-10 w-full overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.12] via-menu-plum/50 to-charcoal/80 p-6 shadow-[0_12px_48px_-12px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md sm:p-8">
+
+          {/* One unified glossy panel — logo and caption live directly on this surface */}
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 shadow-[0_20px_56px_-16px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.07)]">
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.18] via-transparent to-transparent opacity-50"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#2a1f32] via-charcoal to-[#0f0a12]"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-[42%] rounded-t-3xl bg-gradient-to-b from-white/25 to-transparent opacity-35"
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_58%_72%_at_50%_44%,rgba(232,93,42,0.14),rgba(196,30,30,0.1)_38%,transparent_62%)]"
             />
-            <div className="relative mx-auto aspect-square w-[min(9.5rem,42vw)] sm:w-40">
-              <Image
-                src="/images/brand/prologue-logo.webp"
-                alt="La Hamburguesa Loca — circular logo with LHL mark"
-                fill
-                className="object-contain drop-shadow-[0_6px_28px_rgba(0,0,0,0.5)]"
-                sizes="(max-width: 640px) 152px, 160px"
-              />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_130%_100%_at_50%_50%,transparent_35%,rgba(0,0,0,0.5)_100%)]"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.12] via-transparent to-[rgba(196,30,30,0.06)] opacity-90 mix-blend-soft-light"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-[38%] bg-gradient-to-b from-white/[0.14] to-transparent opacity-30"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-overlay"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+              }}
+            />
+
+            <div className="relative z-10 flex flex-col items-center px-6 py-12 sm:px-10 sm:py-14">
+              <div className="relative flex items-center justify-center">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute aspect-square w-[min(11.5rem,48vw)] max-w-[184px] rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.08)_0%,rgba(196,30,30,0.25)_45%,transparent_72%)] blur-xl sm:w-44"
+                />
+                <div className="relative aspect-square w-[min(9.5rem,42vw)] sm:w-40">
+                  <Image
+                    src="/images/brand/prologue-logo.webp"
+                    alt="La Hamburguesa Loca — circular logo with LHL mark"
+                    fill
+                    className="object-contain drop-shadow-[0_8px_32px_rgba(0,0,0,0.55)]"
+                    sizes="(max-width: 640px) 152px, 176px"
+                  />
+                </div>
+              </div>
+              <p className="mt-6 text-center text-[10px] uppercase tracking-editorial text-cream/50">
+                Family-owned in KC
+              </p>
             </div>
-            <p className="relative mt-4 text-center text-[10px] uppercase tracking-editorial text-cream/55">
-              Family-owned in KC
-            </p>
           </div>
         </motion.div>
 
