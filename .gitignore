@@ -32,3 +32,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# local sheet export fixtures (regenerate with npm run validate:sheets)
+/tmp/
+
+# Customer workbook (copy to repo root to run npm run validate:sheets; not committed)
+la_hamburguesa_loca_customer_google_sheets.xlsx
