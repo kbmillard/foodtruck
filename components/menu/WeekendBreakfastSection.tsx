@@ -11,7 +11,11 @@ import { itemRequiresOptionSelections } from "@/lib/menu/option-groups";
 import { MeatChoiceModal } from "@/components/menu/MeatChoiceModal";
 import { MenuOptionGroupsModal } from "@/components/menu/MenuOptionGroupsModal";
 import { cn } from "@/lib/utils/cn";
-import { categoryActiveRing, categoryHeroGradient } from "@/lib/menu/category-styles";
+import {
+  categoryActiveRing,
+  categoryHeroGradient,
+  menuPanelBorderClass,
+} from "@/lib/menu/category-styles";
 import { englishSublineWithoutClock } from "@/lib/menu/strip-clock-from-label";
 import { navPrimaryLinkClass } from "@/lib/ui/nav-typography";
 
@@ -234,7 +238,10 @@ export function WeekendBreakfastSection() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.35 }}
-                    className="w-full min-w-0 max-w-full overflow-x-hidden rounded-3xl border border-white/10 bg-black/35 p-4 sm:p-8"
+                    className={cn(
+                      "w-full min-w-0 max-w-full overflow-x-hidden rounded-3xl border-2 bg-black/35 p-4 sm:p-8",
+                      menuPanelBorderClass(panelColor),
+                    )}
                   >
                     <div className="grid min-w-0 w-full max-w-full grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr]">
                       <div className="min-w-0 w-full max-w-full">
