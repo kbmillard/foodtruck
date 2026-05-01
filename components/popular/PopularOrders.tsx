@@ -25,7 +25,7 @@ export function PopularOrders() {
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
           kicker="Popular orders"
-          title="Featured picks from the sheet."
+          title="Featured picks from the street."
           align="center"
           subtitle="Pulled from the live menu: items marked featured in Google Sheets (or the menu API) surface here first."
         />
