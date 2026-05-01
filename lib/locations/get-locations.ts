@@ -1,4 +1,4 @@
-import { geocodeLocationAddress } from "./google-geocode";
+import { geocodeLocationAddress, getGeocodeApiKey } from "./google-geocode";
 import { parseLocationsFromCsvText } from "./google-sheet-locations";
 import { buildMapEmbedSrcForResponse, formatAddressLine } from "./helpers";
 import { localLocationItems } from "./local-locations";
@@ -40,12 +40,15 @@ async function enrichLocationItem(loc: LocationItem): Promise<LocationItem> {
       geocodedAt: new Date().toISOString(),
     };
   } else {
-    if (!hadCoords && formatAddressLine(next).trim()) {
-      if (process.env.NODE_ENV === "development") {
-        console.warn(
-          `Location geocode unavailable for ${next.name}. Check address or GOOGLE_MAPS_SERVER_KEY.`,
-        );
-      }
+    if (
+      !hadCoords &&
+      formatAddressLine(next).trim() &&
+      process.env.NODE_ENV === "development" &&
+      getGeocodeApiKey()
+    ) {
+      console.warn(
+        `Location geocode unavailable for ${next.name}. Check address or server Geocoding API key.`,
+      );
     }
     if (!next.geocodeSource) {
       next.geocodeSource = "fallback";
@@ -56,7 +59,23 @@ async function enrichLocationItem(loc: LocationItem): Promise<LocationItem> {
   return embedSrc ? { ...next, mapEmbedSrc: embedSrc } : next;
 }
 
+let demoPublicMapsKeyWarningShown = false;
+
+function warnDemoPublicMapsKeyOnly(): void {
+  if (process.env.NODE_ENV !== "development") return;
+  const pub = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
+  const server =
+    process.env.GOOGLE_MAPS_SERVER_KEY?.trim() || process.env.GOOGLE_MAPS_API_KEY?.trim();
+  if (!pub || server) return;
+  if (demoPublicMapsKeyWarningShown) return;
+  demoPublicMapsKeyWarningShown = true;
+  console.warn(
+    "Maps: using NEXT_PUBLIC_GOOGLE_MAPS_API_KEY with HTTP referrer restrictions for client-side maps and geocoding. Google Cloud no longer requires a separate key at creation when website restrictions are set. GOOGLE_MAPS_SERVER_KEY is optional—only add it if you want server-side Geocoding API; restrict that key by IP and do not use the referrer-restricted key on the server.",
+  );
+}
+
 async function enrichLocationItems(items: LocationItem[]): Promise<LocationItem[]> {
+  warnDemoPublicMapsKeyOnly();
   return Promise.all(items.map((item) => enrichLocationItem(item)));
 }
 

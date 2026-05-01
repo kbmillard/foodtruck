@@ -38,18 +38,18 @@ Restaurant and food truck addresses, hours, status, and map links can come from 
 - **How it works:** Each row is one location (`restaurant` or `food_truck`). The app fetches the CSV about every **5 minutes** when **`LOCATIONS_CSV_URL`** (or **`NEXT_PUBLIC_LOCATIONS_CSV_URL`**) is set — same cache window as the menu.
 - **Moving the truck:** Update the food truck row’s **`address`**, **`city`**, **`state`**, **`zip`**, **`status`**, and **`statusNote`**. Optional: **`mapsUrl`**, **`embedUrl`**, **`lat`**, **`lng`**.
 - **`active`:** Set to `FALSE` to hide that row from the public site (inactive rows are not geocoded).
-- **`lat` / `lng`:** Optional. If left blank, the server **auto-geocodes** the row using **Google Geocoding API** (see environment variables). Coordinates from the Sheet are treated as the source of truth when present.
+- **`lat` / `lng`:** Optional. If left blank and a **server** Geocoding API key is set (see environment variables), the server can **auto-geocode** the row. With only the **browser** Maps key, rows stay address-only on the server and the **Find the truck** map resolves them in the browser (Maps JavaScript Geocoder), without breaking `/api/locations`. Coordinates from the Sheet are the source of truth when present.
 - **`status`:** Short label guests see (e.g. `Open`, `Closed`, `Moving Soon`, `Catering Event`, `Sold Out`).
 - **`statusNote`:** Extra line — e.g. where the truck is parked today (“At Al Halal Grocery Store”).
 - **`mapsUrl`:** Full **Open in Google Maps** link for that row. If blank, the site builds a Google Maps search link from the address fields.
-- **`embedUrl`:** **iframe-safe** Google Maps embed URL for the large map banner. If blank, the site builds an embed using **Google Maps Embed API** when a **browser-safe** key is set (`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`), preferring **`place_id`**, then **coordinates**, then the **full address**; otherwise it falls back to a standard `maps?q=…&output=embed` URL so the UI still works.
+- **`embedUrl`:** Optional **iframe-safe** embed URL for the large map banner. If blank, the banner uses coordinates from the Sheet/API when present; otherwise **`placeId`** or the **full address** with the public Maps key (client-side Geocoder and/or embed fallbacks) so the UI does not break when Geocoding API is unavailable.
 - **Columns:** See **`prompt/google-sheet-locations-template.csv`** for the full header row and examples. Optional columns **`placeId`** and **`formattedAddress`** are supported if you want to paste values from Google; they can also be filled automatically after geocoding.
 
 **Required for live Sheet locations:** **`LOCATIONS_CSV_URL`** (or **`NEXT_PUBLIC_LOCATIONS_CSV_URL`**) — published CSV URL.
 
-**Recommended for server-side geocoding:** **`GOOGLE_MAPS_SERVER_KEY`** (private; never exposed to the browser). The server also accepts **`GOOGLE_MAPS_API_KEY`**, and only falls back to **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** for geocoding if no private key is set (not ideal for production).
+**For demo / Vercel-only setup:** **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** is enough for **Maps JavaScript API**, client-side address resolution (Find the Truck banner), and related embed fallbacks. In Google Cloud Console, restrict this key by **HTTP referrer** (website) to your deployed domain (and localhost for dev). Google no longer frames this as “you must also create a server key” at key creation time when those website restrictions are set—**restriction type** still defines what is safe: **HTTP referrer** keys belong in the browser only; do **not** use them for **server-side Geocoding API** (web service) requests.
 
-**Optional public key:** **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** — use for **Maps Embed API** URLs in the browser and for precomputed `mapEmbedSrc` in the API response. Restrict this key by HTTP referrer in Google Cloud Console.
+**Optional server geocoding:** If you want **`lat`/`lng`** filled on the server from addresses, add **`GOOGLE_MAPS_SERVER_KEY`** (or **`GOOGLE_MAPS_API_KEY`**) and restrict that key by **IP address** (or another server-appropriate restriction). This app works without it. Geocoding or other API failures must not break the site: `/api/locations` still returns Sheet rows with address fields; the client map falls back to classic address embeds or the branded “Open in Google Maps” block when needed.
 
 Set **`LOCATIONS_CSV_URL`** on Vercel (preferred) or **`NEXT_PUBLIC_LOCATIONS_CSV_URL`** to enable live updates. If neither is set or the fetch fails, **`lib/locations/local-locations.ts`** is used.
 
@@ -74,9 +74,9 @@ Copy `.env.example` to `.env.local` and fill as needed:
 - **`NEXT_PUBLIC_MENU_CSV_URL`** — Optional alternate env name (also read server-side); prefer `MENU_CSV_URL` on Vercel.
 - **`LOCATIONS_CSV_URL`** — Published Google Sheet **CSV** for locations (restaurant + food truck). When unset or on fetch error, `/api/locations` uses `lib/locations/local-locations.ts`. Prefer this over `NEXT_PUBLIC_*` on Vercel.
 - **`NEXT_PUBLIC_LOCATIONS_CSV_URL`** — Optional alternate (read server-side in `get-locations.ts`); same CSV shape as the template.
-- **`GOOGLE_MAPS_SERVER_KEY`** — Private key for **Google Geocoding API** (server only). Preferred over `GOOGLE_MAPS_API_KEY` for geocoding.
-- **`GOOGLE_MAPS_API_KEY`** — Alternate private key name accepted for geocoding if `GOOGLE_MAPS_SERVER_KEY` is unset.
-- **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** — Browser-safe key for **Maps JavaScript API** (Find the Truck maps use `gestureHandling: greedy` so scroll zoom works without ⌘/Ctrl) and for **Maps Embed API** fallbacks when needed. In Google Cloud, enable **Maps JavaScript API** and **Maps Embed API** (and Geocoding on the server key). Optional for geocoding only as a last resort if no private key exists; prefer a **server** key for Geocoding.
+- **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** — Public Maps key for **Maps JavaScript API** (Find the Truck uses `gestureHandling: greedy`), client-side geocoding where needed, and **Maps Embed API** when used. Restrict by **HTTP referrer**. Not used for server Geocoding API.
+- **`GOOGLE_MAPS_SERVER_KEY`** — Optional key used only for **Google Geocoding API** (web service) on the server. Not required when you rely on referrer-restricted **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** and client-side resolution. If set, restrict by **IP address** (or equivalent); preferred over `GOOGLE_MAPS_API_KEY` for the same purpose.
+- **`GOOGLE_MAPS_API_KEY`** — Alternate env name for the same server Geocoding key if `GOOGLE_MAPS_SERVER_KEY` is unset.
 - **`NEXT_PUBLIC_CLOVER_PUBLIC_TOKEN_SANDBOX`** — Clover public / PAKMS-style key for sandbox.
 - **`NEXT_PUBLIC_CLOVER_MERCHANT_ID_SANDBOX`** — Clover merchant ID for sandbox.
 - **`NEXT_PUBLIC_CLOVER_ENV`** — `sandbox` or `production`.
@@ -109,7 +109,7 @@ These need **you / the business** (not fully automatable in repo code):
 | **Confirmed prices** | Fill prices in the sheet or `local-menu.ts`, then enable real Clover charges (see TODOs in `lib/menu/local-menu.ts` and `CloverPaymentModal`). |
 | **Orders** | Replace mock logic in `app/api/orders/route.ts` (email, POS, Clover server-side charge). |
 | **Catering form** | Wire `components/catering/CateringSection.tsx` to email or a server action. |
-| **Map** | Set **`GOOGLE_MAPS_SERVER_KEY`** for auto-geocode when **`lat`/`lng`** are blank; set **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** for Embed API pins in the banner. |
+| **Map** | **`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`** with **HTTP referrer** restrictions is enough for the Find the Truck banner and client-side resolution. **`GOOGLE_MAPS_SERVER_KEY`** is optional—only for server-side Geocoding when **`lat`/`lng`** are blank and you want coordinates filled on the server. |
 | **Brand assets** | Copy final logo pack into `la_hamburguesa_loca_web_assets` / `public/icons` per `prompt/asset-map.md`. |
 | **Security audit** | Run `npm audit`; optional later: replace `to-ico` if transitive advisories matter to you. |
 

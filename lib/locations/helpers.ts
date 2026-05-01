@@ -29,7 +29,7 @@ function mapsEmbedV1Place(loc: LocationItem, key: string): string | null {
 }
 
 /**
- * Server-side: precompute embed URL for JSON (uses public key only).
+ * Server-side: optional precomputed Embed API URL for JSON (uses the browser/public key only).
  * Returns undefined when owner `embedUrl` is set (client uses that) or no key.
  */
 export function buildMapEmbedSrcForResponse(
@@ -63,6 +63,20 @@ export function resolvedAppleMapsUrl(loc: LocationItem): string {
   return `https://maps.apple.com/?q=${encodeURIComponent(formatAddressLine(loc))}`;
 }
 
+/** Classic Google Maps embed (no API key) when only an address is available. */
+export function addressOnlyMapsEmbedIframeUrl(loc: LocationItem): string | null {
+  const line = formatAddressLine(loc);
+  if (!line.trim()) return null;
+  return `https://www.google.com/maps?q=${encodeURIComponent(line)}&output=embed`;
+}
+
+/** Classic Google Maps embed (no API key) when only a Place ID is available. */
+export function placeIdOnlyMapsEmbedIframeUrl(placeId: string): string | null {
+  const p = placeId.trim();
+  if (!p) return null;
+  return `https://www.google.com/maps?q=${encodeURIComponent(`place_id:${p}`)}&output=embed`;
+}
+
 /**
  * Iframe src: explicit embedUrl, then server-built mapEmbedSrc, then Embed v1 with
  * NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, then legacy `maps?q=lat,lng&output=embed`.
@@ -80,11 +94,7 @@ export function resolvedEmbedSrc(loc: LocationItem): string | null {
   if (loc.lat != null && loc.lng != null && !Number.isNaN(loc.lat) && !Number.isNaN(loc.lng)) {
     return `https://www.google.com/maps?q=${loc.lat},${loc.lng}&z=16&output=embed`;
   }
-  const line = formatAddressLine(loc);
-  if (line.trim()) {
-    return `https://www.google.com/maps?q=${encodeURIComponent(line)}&output=embed`;
-  }
-  return null;
+  return addressOnlyMapsEmbedIframeUrl(loc);
 }
 
 export function telHrefFromDisplay(phoneDisplay: string, fallbackTel: string): string {

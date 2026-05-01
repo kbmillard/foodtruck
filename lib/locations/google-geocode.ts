@@ -10,12 +10,19 @@ export type GeocodeResult = {
   source: "google-geocode" | "sheet";
 };
 
-/** Server-side geocoding key priority (never send to client). */
+/**
+ * Key for **Google Geocoding API (web service)** on the server only, when you opt in
+ * to server-side geocoding. Restrict this key by **IP** (or another server-appropriate
+ * restriction)—do not use an HTTP-referrer–restricted (browser) key for these requests.
+ *
+ * A second key is **not** required by Google Cloud when your public key already uses
+ * website restrictions; it is only needed if you call the Geocoding web service from
+ * your backend. `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is intentionally **not** used here;
+ * the browser resolves addresses with the Maps JavaScript Geocoder when no server key exists.
+ */
 export function getGeocodeApiKey(): string | undefined {
   const k =
-    process.env.GOOGLE_MAPS_SERVER_KEY?.trim() ||
-    process.env.GOOGLE_MAPS_API_KEY?.trim() ||
-    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
+    process.env.GOOGLE_MAPS_SERVER_KEY?.trim() || process.env.GOOGLE_MAPS_API_KEY?.trim();
   return k || undefined;
 }
 
@@ -31,7 +38,7 @@ function hasStoredCoords(loc: LocationItem): boolean {
 /**
  * Geocode a location address via Google Geocoding API (server-only).
  * If the row already has lat/lng, returns those with `source: "sheet"` (no API call).
- * Returns null if no key, empty address, or API error / zero results.
+ * Returns null if no **server** geocoding key, empty address, or API error / zero results.
  */
 export async function geocodeLocationAddress(
   location: LocationItem,

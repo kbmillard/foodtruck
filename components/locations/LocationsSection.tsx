@@ -13,6 +13,7 @@ import {
   resolvedMapsUrl,
   telHrefFromDisplay,
 } from "@/lib/locations/helpers";
+import { GoogleMapClientResolved } from "@/components/locations/GoogleMapClientResolved";
 import { GoogleMapGreedy } from "@/components/locations/GoogleMapGreedy";
 
 function cardDescription(loc: LocationItem): string {
@@ -242,6 +243,7 @@ function MapEmbedBlock({ loc }: { loc: LocationItem }) {
   const line = formatAddressLine(loc);
   const ownerEmbed = loc.embedUrl?.trim();
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
+  const placeId = loc.placeId?.trim();
   const lat = parseCoord(loc.lat);
   const lng = parseCoord(loc.lng);
   const coordsOk = lat != null && lng != null;
@@ -253,6 +255,12 @@ function MapEmbedBlock({ loc }: { loc: LocationItem }) {
    */
   const useGreedyJsMap =
     coordsOk && Boolean(apiKey) && (!ownerEmbed || !isThirdPartyEmbedUrl(ownerEmbed));
+  /** Resolve placeId or address in-browser (HTTP-referrer key); iframe fallback if geocode fails. */
+  const useClientResolve =
+    Boolean(apiKey) &&
+    !coordsOk &&
+    (Boolean(placeId) || Boolean(line.trim())) &&
+    !ownerEmbed?.trim();
   const src = useGreedyJsMap ? null : resolvedEmbedSrc(loc);
 
   return (
@@ -266,6 +274,14 @@ function MapEmbedBlock({ loc }: { loc: LocationItem }) {
           <GoogleMapGreedy
             lat={lat}
             lng={lng}
+            title={loc.name}
+            className="h-[220px] w-full min-h-[220px] bg-charcoal"
+          />
+        </div>
+      ) : useClientResolve ? (
+        <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
+          <GoogleMapClientResolved
+            loc={loc}
             title={loc.name}
             className="h-[220px] w-full min-h-[220px] bg-charcoal"
           />

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { useOrder } from "@/context/OrderContext";
@@ -21,6 +22,15 @@ export function EditorialNav() {
   const { scrollToSection, openOrderPanel } = useOrder();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const ids = LINKS.map((l) => l.id);
@@ -40,24 +50,160 @@ export function EditorialNav() {
     return () => obs.disconnect();
   }, []);
 
+  const close = useCallback(() => setOpen(false), []);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (mq.matches) setOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    onChange();
+    return () => mq.removeEventListener("change", onChange);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, close]);
+
+  useEffect(() => {
+    if (!open) {
+      menuButtonRef.current?.focus();
+      return;
+    }
+    const t = window.requestAnimationFrame(() => {
+      const first = panelRef.current?.querySelector<HTMLElement>(
+        "button[data-mobile-nav-link]",
+      );
+      first?.focus();
+    });
+    return () => window.cancelAnimationFrame(t);
+  }, [open]);
+
   const go = (id: string) => {
     scrollToSection(id);
     setOpen(false);
   };
+
+  const openOrderFromMenu = () => {
+    setOpen(false);
+    openOrderPanel();
+  };
+
+  const backdropTransition = reduceMotion ? { duration: 0.15 } : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
+  const panelTransition = reduceMotion
+    ? { duration: 0.15 }
+    : { type: "spring" as const, stiffness: 420, damping: 34, mass: 0.85 };
+
+  const mobileOverlay =
+    mounted &&
+    createPortal(
+      <AnimatePresence>
+        {open ? (
+          <div
+            className="pointer-events-none fixed inset-0 z-[58] max-w-[100vw] overflow-hidden lg:hidden"
+            aria-hidden={!open}
+          >
+            <motion.button
+              key="mobile-nav-backdrop"
+              type="button"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={backdropTransition}
+              aria-label="Close menu"
+              className="pointer-events-auto fixed left-0 right-0 top-[var(--nav-h)] bottom-0 z-[58] bg-black/70 backdrop-blur-md"
+              onClick={close}
+            />
+            <motion.nav
+              id="mobile-nav-panel"
+              key="mobile-nav-panel"
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.98 }}
+              animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.98 }}
+              transition={panelTransition}
+              className="pointer-events-auto fixed left-4 right-4 top-[calc(var(--nav-h)+12px)] z-[59] flex max-h-[calc(100dvh-120px)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#111]/90 shadow-2xl backdrop-blur-xl"
+              onPointerDown={(e) => e.stopPropagation()}
+            >
+              <span id={titleId} className="sr-only">
+                Site navigation
+              </span>
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-6">
+                <ul className="flex flex-col">
+                  {LINKS.map((l, i) => (
+                    <motion.li
+                      key={l.id}
+                      initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={
+                        reduceMotion ? { duration: 0 } : { delay: 0.03 + i * 0.025, duration: 0.2 }
+                      }
+                    >
+                      <button
+                        type="button"
+                        data-mobile-nav-link
+                        className="flex w-full items-center border-b border-white/10 py-4 text-left text-sm font-medium uppercase tracking-editorial text-cream transition hover:bg-white/5 active:bg-white/10"
+                        onClick={() => go(l.id)}
+                      >
+                        {l.label}
+                      </button>
+                    </motion.li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  data-mobile-nav-link
+                  className="mt-4 w-full rounded-full bg-salsa py-4 text-center text-xs font-semibold uppercase tracking-editorial text-cream shadow-lg transition hover:bg-salsa/90"
+                  onClick={openOrderFromMenu}
+                >
+                  Order now
+                </button>
+              </div>
+            </motion.nav>
+          </div>
+        ) : null}
+      </AnimatePresence>,
+      document.body,
+    );
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-white/10 bg-charcoal/80 backdrop-blur-md">
       <div className="mx-auto flex h-[var(--nav-h)] max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-6">
         <div className="flex flex-1 items-center justify-start gap-2 sm:gap-4">
           <button
+            ref={menuButtonRef}
             type="button"
-            className="inline-flex items-center justify-center rounded-full border border-white/10 p-2 text-cream sm:hidden"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
+            className="inline-flex items-center justify-center rounded-full border border-white/10 p-2 text-cream transition hover:bg-white/5 lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls={open ? "mobile-nav-panel" : undefined}
           >
-            <Menu className="h-5 w-5" />
+            {open ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
           </button>
-          <nav className="hidden flex-wrap items-center gap-x-5 gap-y-2 lg:flex">
+          <nav className="hidden flex-wrap items-center gap-x-5 gap-y-2 lg:flex" aria-label="Primary">
             {LINKS.slice(0, 4).map((l) => (
               <button
                 key={l.id}
@@ -85,7 +231,7 @@ export function EditorialNav() {
         </button>
 
         <div className="flex flex-1 items-center justify-end gap-2 sm:gap-3">
-          <nav className="hidden flex-wrap items-center justify-end gap-x-5 lg:flex">
+          <nav className="hidden flex-wrap items-center justify-end gap-x-5 lg:flex" aria-label="Secondary">
             {LINKS.slice(4).map((l) => (
               <button
                 key={l.id}
@@ -103,65 +249,17 @@ export function EditorialNav() {
           <button
             type="button"
             onClick={openOrderPanel}
-            className="rounded-full bg-salsa px-4 py-2 text-[10px] font-semibold uppercase tracking-editorial text-cream shadow-md transition hover:bg-salsa/90 sm:text-[11px]"
+            className={cn(
+              "rounded-full bg-salsa px-4 py-2 text-[10px] font-semibold uppercase tracking-editorial text-cream shadow-md transition hover:bg-salsa/90 sm:text-[11px]",
+              open && "max-lg:hidden",
+            )}
           >
             Order now
           </button>
         </div>
       </div>
 
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[55] bg-black/70 sm:hidden"
-          >
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 280, damping: 32 }}
-              className="absolute right-0 top-0 flex h-full w-[min(100%,360px)] flex-col border-l border-white/10 bg-charcoal p-6"
-            >
-              <div className="mb-6 flex items-center justify-between">
-                <BrandLogo width={56} height={56} />
-                <button
-                  type="button"
-                  className="rounded-full border border-white/10 p-2"
-                  onClick={() => setOpen(false)}
-                  aria-label="Close menu"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-              <nav className="flex flex-col gap-4">
-                {LINKS.map((l) => (
-                  <button
-                    key={l.id}
-                    type="button"
-                    className="text-left text-sm uppercase tracking-editorial text-cream"
-                    onClick={() => go(l.id)}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  className="mt-4 rounded-full bg-salsa py-3 text-center text-xs font-semibold uppercase tracking-editorial text-cream"
-                  onClick={() => {
-                    setOpen(false);
-                    openOrderPanel();
-                  }}
-                >
-                  Order now
-                </button>
-              </nav>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      {mobileOverlay}
     </header>
   );
 }
