@@ -2,6 +2,7 @@
  * TODO: Replace null prices with confirmed restaurant pricing before enabling real payment checkout.
  */
 import type { MenuItem } from "./schema";
+import { weekendBreakfastLocalItems } from "./weekend-breakfast-local";
 
 export const localMenuItems: MenuItem[] = [
   {
@@ -432,4 +433,5 @@ export const localMenuItems: MenuItem[] = [
     meatChoiceRequired: false,
     featured: true,
   },
+  ...weekendBreakfastLocalItems,
 ];

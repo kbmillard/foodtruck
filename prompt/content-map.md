@@ -16,7 +16,7 @@
 - **Fallback menu (TypeScript):** `lib/menu/local-menu.ts`.
 - **Category tab styling (labels/colors):** `lib/menu/category-meta.ts`.
 - **Meat choices list:** `lib/menu/schema.ts` (`meatChoices`).
-- **Schema / types:** `lib/menu/schema.ts`.
+- **Schema / types:** `lib/menu/schema.ts` (includes optional `section`, `englishName`, `availabilityLabel`, `optionGroups`, `imageAlt`).
 - **Google Sheet CSV parsing:** `lib/menu/google-sheet-menu.ts`, `lib/menu/csv-utils.ts`.
 - **Merged catalog (Sheet → fallback):** `lib/menu/get-menu.ts`.
 - **HTTP:** `GET /api/menu` in `app/api/menu/route.ts` (revalidate ~5m).

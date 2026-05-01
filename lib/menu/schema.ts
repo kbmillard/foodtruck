@@ -1,9 +1,19 @@
+export type MenuOptionGroup = {
+  id: string;
+  label: string;
+  required: boolean;
+  options: string[];
+};
+
 export type MenuItem = {
   id: string;
   active: boolean;
   category: string;
+  /** Subsection within category (e.g. Guisos under Weekend Breakfast) */
+  section?: string;
   sortOrder: number;
   name: string;
+  englishName?: string;
   description?: string;
   /** Dollar amount from sheet when priced; null until confirmed */
   price: number | null;
@@ -11,6 +21,11 @@ export type MenuItem = {
   meatChoiceRequired: boolean;
   featured: boolean;
   imageUrl?: string;
+  imageAlt?: string;
+  /** Shown on weekend breakfast (e.g. Saturday & Sunday, 8 AM - 4 PM) */
+  availabilityLabel?: string;
+  /** Required/optional choices (e.g. guiso format, chilaquiles sauce) */
+  optionGroups?: MenuOptionGroup[];
 };
 
 export type MenuCategoryMeta = {
@@ -49,6 +64,7 @@ export const MENU_CATEGORY_ORDER = [
   "Antojitos",
   "Kids Menu",
   "Drinks",
+  "Weekend Breakfast",
 ] as const;
 
 export const meatChoices = [

@@ -8,6 +8,11 @@ import React, {
   useState,
 } from "react";
 import { priceDollarsToCents } from "@/lib/menu/schema";
+import {
+  itemRequiresOptionSelections,
+  optionSelectionsComplete,
+  selectionsKey,
+} from "@/lib/menu/option-groups";
 import { useMenuCatalog } from "@/context/MenuCatalogContext";
 import type {
   CartLine,
@@ -28,6 +33,7 @@ function newLineId() {
 type AddItemOptions = {
   quantity?: number;
   selectedMeat?: string;
+  selectedOptions?: Record<string, string>;
 };
 
 type OrderContextValue = {
@@ -127,7 +133,17 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
       if (!item) return;
       const qty = opts?.quantity ?? 1;
       const selectedMeat = opts?.selectedMeat;
+      const rawSel = opts?.selectedOptions;
+      const selectedOptions =
+        rawSel && Object.keys(rawSel).length > 0 ? rawSel : undefined;
+
       if (item.meatChoiceRequired && !selectedMeat?.trim()) return;
+      if (
+        itemRequiresOptionSelections(item) &&
+        !optionSelectionsComplete(item, selectedOptions ?? {})
+      ) {
+        return;
+      }
 
       const unitPriceCents = priceDollarsToCents(item.price);
       const includesFries = item.includesFries;
@@ -137,6 +153,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
           (l) =>
             l.menuItemId === menuItemId &&
             normMeat(l.selectedMeat) === normMeat(selectedMeat) &&
+            selectionsKey(l.selectedOptions) === selectionsKey(selectedOptions) &&
             !(l.notes?.trim()),
         );
         if (existing) {
@@ -153,6 +170,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
           unitPriceCents,
           quantity: qty,
           selectedMeat: selectedMeat?.trim() || undefined,
+          selectedOptions,
           includesFries: includesFries || undefined,
         };
         return [...prev, line];

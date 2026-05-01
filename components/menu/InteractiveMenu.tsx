@@ -10,6 +10,9 @@ import { useOrder } from "@/context/OrderContext";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/utils/cn";
 import { MeatChoiceModal } from "@/components/menu/MeatChoiceModal";
+import { MenuOptionGroupsModal } from "@/components/menu/MenuOptionGroupsModal";
+import { WeekendBreakfastSection } from "@/components/menu/WeekendBreakfastSection";
+import { itemRequiresOptionSelections } from "@/lib/menu/option-groups";
 import { categoryActiveRing, categoryHeroGradient } from "@/lib/menu/category-styles";
 
 function MenuSkeleton() {
@@ -38,9 +41,10 @@ function PriceRow({ name, price }: { name: string; price: number | null }) {
 
 export function InteractiveMenu() {
   const { data, loading, error } = useMenuCatalog();
-  const { addItem, openOrderPanel } = useOrder();
+  const { addItem, openOrderPanel, scrollToSection } = useOrder();
   const [activeId, setActiveId] = useState(MENU_CATEGORY_META[0]!.id);
   const [meatItem, setMeatItem] = useState<MenuItem | null>(null);
+  const [optionsItem, setOptionsItem] = useState<MenuItem | null>(null);
 
   const visibleMeta = useMemo(() => {
     if (!data?.items.length) return MENU_CATEGORY_META;
@@ -64,9 +68,13 @@ export function InteractiveMenu() {
     );
   }, [active, data]);
 
-  const onAdd = (item: MenuItem) => {
+  const handleAdd = (item: MenuItem) => {
     if (item.meatChoiceRequired) {
       setMeatItem(item);
+      return;
+    }
+    if (itemRequiresOptionSelections(item)) {
+      setOptionsItem(item);
       return;
     }
     addItem(item.id, { quantity: 1 });
@@ -78,6 +86,13 @@ export function InteractiveMenu() {
     addItem(meatItem.id, { quantity: 1, selectedMeat: meat });
     openOrderPanel();
     setMeatItem(null);
+  };
+
+  const onOptionsChosen = (selections: Record<string, string>) => {
+    if (!optionsItem) return;
+    addItem(optionsItem.id, { quantity: 1, selectedOptions: selections });
+    openOrderPanel();
+    setOptionsItem(null);
   };
 
   return (
@@ -150,7 +165,7 @@ export function InteractiveMenu() {
                       >
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.12),transparent_55%)]" />
                         <p className="absolute bottom-6 left-6 max-w-xs text-sm text-cream/90">
-                          Tap items on the right — meat choices open first when required. Final
+                          Tap items on the right — meat or style choices open when required. Final
                           price confirmed at pickup when not listed.
                         </p>
                       </div>
@@ -167,7 +182,7 @@ export function InteractiveMenu() {
                               {item.imageUrl ? (
                                 <Image
                                   src={item.imageUrl}
-                                  alt={`${item.name} — ${active.label}`}
+                                  alt={item.imageAlt ?? `${item.name} — ${active.label}`}
                                   fill
                                   className="object-cover"
                                   sizes="96px"
@@ -190,6 +205,11 @@ export function InteractiveMenu() {
                                   Choice of meat
                                 </span>
                               ) : null}
+                              {item.optionGroups?.some((g) => g.required) ? (
+                                <span className="mt-1 inline-block rounded-full border border-accent-orange/50 bg-accent-orange/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-orange">
+                                  Choose options
+                                </span>
+                              ) : null}
                               {item.description ? (
                                 <p className="mt-2 text-xs leading-relaxed text-cream/60">
                                   {item.description}
@@ -199,7 +219,7 @@ export function InteractiveMenu() {
                                 <button
                                   type="button"
                                   className="rounded-full bg-salsa px-3 py-1.5 text-[10px] font-semibold uppercase tracking-editorial text-cream hover:bg-salsa/90"
-                                  onClick={() => onAdd(item)}
+                                  onClick={() => handleAdd(item)}
                                 >
                                   Add
                                 </button>
@@ -222,6 +242,23 @@ export function InteractiveMenu() {
             </AnimatePresence>
           </div>
         )}
+
+        {!loading && data ? (
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
+            <p className="max-w-xl text-center text-sm text-cream/75">
+              Weekend breakfast available Saturday &amp; Sunday, 8 AM - 4 PM.
+            </p>
+            <button
+              type="button"
+              onClick={() => scrollToSection("weekend-breakfast")}
+              className="rounded-full border border-accent-orange/50 bg-accent-orange/15 px-5 py-2 text-[10px] font-semibold uppercase tracking-editorial text-cream hover:bg-accent-orange/25"
+            >
+              View Weekend Breakfast
+            </button>
+          </div>
+        ) : null}
+
+        <WeekendBreakfastSection />
       </div>
 
       <MeatChoiceModal
@@ -231,6 +268,14 @@ export function InteractiveMenu() {
           if (!o) setMeatItem(null);
         }}
         onConfirm={onMeatChosen}
+      />
+      <MenuOptionGroupsModal
+        item={optionsItem}
+        open={Boolean(optionsItem)}
+        onOpenChange={(o) => {
+          if (!o) setOptionsItem(null);
+        }}
+        onConfirm={onOptionsChosen}
       />
     </section>
   );

@@ -9,10 +9,26 @@ function categoryRank(label: string): number {
   return i >= 0 ? i : 999;
 }
 
+const BREAKFAST_SECTION_RANK: Record<string, number> = {
+  Guisos: 0,
+  Desayunos: 1,
+  Caldos: 2,
+};
+
+function sectionRank(section?: string): number {
+  if (!section) return -1;
+  return BREAKFAST_SECTION_RANK[section] ?? 99;
+}
+
 function sortItems(items: MenuItem[]): MenuItem[] {
   return [...items].sort((a, b) => {
     const rc = categoryRank(a.category) - categoryRank(b.category);
     if (rc !== 0) return rc;
+    const sameCat = a.category.toLowerCase() === b.category.toLowerCase();
+    if (sameCat && a.category.toLowerCase() === "weekend breakfast") {
+      const sr = sectionRank(a.section) - sectionRank(b.section);
+      if (sr !== 0) return sr;
+    }
     const rs = a.sortOrder - b.sortOrder;
     if (rs !== 0) return rs;
     return a.name.localeCompare(b.name);

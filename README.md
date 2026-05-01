@@ -23,8 +23,11 @@ The live site reads the menu from **Google Sheets** (published as CSV). The rest
 - **`active`:** Set to `FALSE` to hide an item from the menu.
 - **`price`:** Leave **blank** for **Price TBD** on the site. Add a number (e.g. `12.99`) when the price is confirmed. **Add real prices before turning on live card checkout** (Clover); until then, guests use **Send Order Request** for carts with unknown prices.
 - **`imageUrl`:** Optional. Leave blank if you do not have a photo yet.
-- **Required columns (header row):**  
-  `id`, `active`, `category`, `sortOrder`, `name`, `description`, `price`, `includesFries`, `meatChoiceRequired`, `featured`, `imageUrl`
+- **Weekend Breakfast:** Use **`category`** = `Weekend Breakfast`. Use **`section`** = `Guisos`, `Desayunos`, or `Caldos` so items group under the weekend breakfast board. Set **`availabilityLabel`** (e.g. `Saturday & Sunday, 8 AM - 4 PM`) for the orange banner line on those rows. Leave **`price`** blank for **Price TBD**; carts with any TBD item stay on **Send Order Request**.
+- **`optionGroupsJson`:** Optional. CSV-safe JSON array of `{ id, label, required, options[] }` for required choices (e.g. Guisos **Style**: Taco / Burrito / Gordita Harina / Gordita Maíz; Chilaquiles **Sauce**: Verde / Rojo). Blank is fine. Invalid JSON on one row is skipped so the rest of the menu still loads.
+- **Preferred header row (all columns):**  
+  `id`, `active`, `category`, `section`, `sortOrder`, `name`, `englishName`, `description`, `price`, `includesFries`, `meatChoiceRequired`, `featured`, `imageUrl`, `imageAlt`, `availabilityLabel`, `optionGroupsJson`  
+  Older sheets with only the original columns still work.
 
 Start from **`prompt/google-sheet-menu-template.csv`**, publish the tab as CSV, and set **`MENU_CSV_URL`** on Vercel (see Environment variables). More detail: **`prompt/menu-management.md`**.
 

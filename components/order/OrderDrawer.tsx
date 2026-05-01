@@ -3,6 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { useOrder } from "@/context/OrderContext";
+import { useMenuCatalog } from "@/context/MenuCatalogContext";
+import { formatOptionLine } from "@/lib/menu/option-groups";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { cn } from "@/lib/utils/cn";
 
@@ -24,6 +26,7 @@ function lineLineTotal(cents: number | null, qty: number) {
 }
 
 export function OrderDrawer() {
+  const { itemsById } = useMenuCatalog();
   const {
     cart,
     updateQty,
@@ -163,6 +166,20 @@ export function OrderDrawer() {
                           {line.selectedMeat ? (
                             <p className="mt-1 text-xs text-accent-green">{line.selectedMeat}</p>
                           ) : null}
+                          {line.selectedOptions && Object.keys(line.selectedOptions).length > 0
+                            ? Object.entries(line.selectedOptions).map(([gid, val]) => {
+                                const menuItem = itemsById.get(line.menuItemId);
+                                const group = menuItem?.optionGroups?.find((g) => g.id === gid);
+                                const label = group
+                                  ? formatOptionLine(group, val)
+                                  : `${gid}: ${val}`;
+                                return (
+                                  <p key={gid} className="mt-1 text-xs text-accent-orange">
+                                    {label}
+                                  </p>
+                                );
+                              })
+                            : null}
                           {line.includesFries ? (
                             <span className="mt-1 inline-block rounded-full border border-accent-cyan/40 bg-accent-cyan/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-cyan">
                               With fries

@@ -1,7 +1,11 @@
-id,active,category,sortOrder,name,description,price,includesFries,meatChoiceRequired,featured,imageUrl
-burger-loca,TRUE,Hamburguesas,1,Loca,"Ham patty, ham, white cheese, bacon, mayo, ketchup, mustard, lettuce, tomato, avocado.",,TRUE,FALSE,TRUE,
-burger-regia,TRUE,Hamburguesas,2,Regia,"Ham patty, ham, white cheese, bacon, salami, mayo, ketchup, mustard, lettuce, tomato, avocado.",,TRUE,FALSE,TRUE,
-taco-quesabirria,TRUE,Tacos,3,Quesabirria,"Order of 3 with consommé, onion, cilantro, cheese, and limes.",,FALSE,FALSE,TRUE,
-taco-street,TRUE,Tacos,4,Street Tacos,"Classic street tacos with choice of meat.",,FALSE,TRUE,TRUE,
-antojito-papas-locas,TRUE,Antojitos,5,Papas Locas,"French fries, nacho cheese, choice of meat, pico de gallo, sour cream, avocado.",,FALSE,TRUE,TRUE,
-drink-aguas-frescas,TRUE,Drinks,6,Aguas Frescas,"Rotating fresh fruit waters.",,FALSE,FALSE,FALSE,
+id,active,category,section,sortOrder,name,englishName,description,price,includesFries,meatChoiceRequired,featured,imageUrl,imageAlt,availabilityLabel,optionGroupsJson
+burger-loca,TRUE,Hamburguesas,,1,Loca,,"Ham patty, ham, white cheese, bacon, mayo, ketchup, mustard, lettuce, tomato, avocado.",,TRUE,FALSE,TRUE,,,,
+burger-regia,TRUE,Hamburguesas,,2,Regia,,"Ham patty, ham, white cheese, bacon, salami, mayo, ketchup, mustard, lettuce, tomato, avocado.",,TRUE,FALSE,TRUE,,,,
+taco-quesabirria,TRUE,Tacos,,3,Quesabirria,,"Order of 3 with consommé, onion, cilantro, cheese, and limes.",,FALSE,FALSE,TRUE,,,,
+taco-street,TRUE,Tacos,,4,Street Tacos,,"Classic street tacos with choice of meat.",,FALSE,TRUE,TRUE,,,,
+antojito-papas-locas,TRUE,Antojitos,,5,Papas Locas,,"French fries, nacho cheese, choice of meat, pico de gallo, sour cream, avocado.",,FALSE,TRUE,TRUE,,,,
+drink-aguas-frescas,TRUE,Drinks,,6,Aguas Frescas,,"Rotating fresh fruit waters.",,FALSE,FALSE,FALSE,,,,
+wb-guiso-chicharron-prensado,TRUE,Weekend Breakfast,Guisos,1,Chicharrón Prensado,Pressed Pork,"Slow-cooked, seasoned pork with a rich, savory flavor.",,FALSE,FALSE,FALSE,,,,"Saturday & Sunday, 8 AM - 4 PM","[{""id"":""format"",""label"":""Style"",""required"":true,""options"":[""Taco"",""Burrito"",""Gordita Harina"",""Gordita Maíz""]}]"
+wb-bisteck,TRUE,Weekend Breakfast,Guisos,8,Bisteck a la Mexicana,Mexican Style Steak,"Sliced beef cooked in a savory spicy sauce of tomatoes, onions, and green chiles.",,FALSE,FALSE,FALSE,,,,"Saturday & Sunday, 8 AM - 4 PM","[{""id"":""format"",""label"":""Style"",""required"":true,""options"":[""Taco"",""Burrito"",""Gordita Harina"",""Gordita Maíz""]}]"
+wb-chilaquiles,TRUE,Weekend Breakfast,Desayunos,21,Chilaquiles Verdes or Rojos,Green or Red Chilaquiles,"Tortilla chips simmered in red or green sauce, topped with cheese, sour cream, onions, and a fried egg.",,FALSE,FALSE,FALSE,,,,"Saturday & Sunday, 8 AM - 4 PM","[{""id"":""sauce"",""label"":""Sauce"",""required"":true,""options"":[""Verde"",""Rojo""]}]"
+wb-menudo,TRUE,Weekend Breakfast,Caldos,40,Menudo,Mexican Tripe Soup,"Mexican soup made from slow-cooked beef tripe in a flavorful red chili broth with hominy.",,FALSE,FALSE,FALSE,,,,"Saturday & Sunday, 8 AM - 4 PM",

@@ -23,16 +23,20 @@
 | --- | --- |
 | id | Optional stable id for URLs and cart; if blank, generated from category + name |
 | active | TRUE/FALSE, yes/no, 1/0 |
-| category | Must match one of: Hamburguesas, Tacos, Tortas, Antojitos, Kids Menu, Drinks (extra categories sort last) |
-| sortOrder | Number, lower first within category |
+| category | Main board: Hamburguesas, Tacos, Tortas, Antojitos, Kids Menu, Drinks. Also **`Weekend Breakfast`** for the weekend section (see below). |
+| section | Optional. For **Weekend Breakfast**, use `Guisos`, `Desayunos`, or `Caldos`. |
+| sortOrder | Number, lower first within category (and section for weekend rows) |
 | name | Item display name |
+| englishName | Optional English subtitle (shown on weekend breakfast cards) |
 | description | Optional |
 | price | Blank → Price TBD; number → dollars |
 | includesFries | TRUE for burgers with fries |
 | meatChoiceRequired | TRUE forces meat picker before add-to-cart |
 | featured | TRUE surfaces item in Popular Orders |
 | imageUrl | Optional absolute image URL (add hostname to `next.config` if needed) |
-| id | Optional stable id; otherwise generated from category + name |
+| imageAlt | Optional alt text for `imageUrl` |
+| availabilityLabel | Optional (e.g. `Saturday & Sunday, 8 AM - 4 PM` for weekend items) |
+| optionGroupsJson | Optional JSON array: `{ id, label, required, options[] }[]` for required extras (Guisos style, Chilaquiles sauce). Invalid JSON on a row is ignored. |
 
 ## Template
 

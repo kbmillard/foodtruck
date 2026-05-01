@@ -3,6 +3,7 @@
  */
 export type {
   MenuItem,
+  MenuOptionGroup,
   MenuCatalogResponse,
   MenuResponse,
   MenuCategoryColor,
