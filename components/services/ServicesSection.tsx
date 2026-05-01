@@ -11,7 +11,7 @@ export function ServicesSection() {
   const { openOrderPanel, scrollToSection, focusCatering } = useOrder();
 
   return (
-    <section id="services" className="border-t border-white/10 bg-tortilla/5 py-24">
+    <section id="services" className="border-t border-white/10 bg-charcoal py-24">
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
           kicker="Services"

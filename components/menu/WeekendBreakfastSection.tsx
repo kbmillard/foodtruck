@@ -121,15 +121,15 @@ export function WeekendBreakfastSection() {
   return (
     <div
       id="weekend-breakfast"
-      className="scroll-mt-[calc(var(--nav-h)+16px)] mt-10 w-full max-w-full overflow-x-hidden border-t border-accent-orange/30 bg-gradient-to-b from-accent-orange/[0.07] via-menu-plum/45 to-charcoal py-12 md:from-accent-orange/15 md:via-menu-plum md:to-charcoal md:py-20"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] mt-10 w-full max-w-full overflow-x-hidden border-t border-white/10 bg-charcoal py-12 md:py-20"
     >
       <div className="mx-auto w-full max-w-full px-4 sm:px-5 md:px-8">
         <div
           id="weekend-breakfast-start"
           tabIndex={-1}
-          className="w-full min-w-0 max-w-full rounded-2xl border border-accent-orange/40 bg-black/40 p-4 outline-none focus:outline-none sm:p-5 md:rounded-3xl md:p-10"
+          className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/40 p-4 outline-none focus:outline-none sm:p-5 md:rounded-3xl md:p-10"
         >
-          <p className="text-xs uppercase tracking-editorial text-accent-orange">
+          <p className="text-xs uppercase tracking-editorial text-cream/60">
             Weekend Breakfast
           </p>
           <h2 className="mt-2 font-display text-3xl text-cream sm:text-4xl md:text-5xl">
@@ -196,7 +196,7 @@ export function WeekendBreakfastSection() {
                               </p>
                             ) : null}
                             {item.availabilityLabel ? (
-                              <p className="mt-1 max-w-full break-words text-[10px] uppercase leading-snug text-accent-orange/90 md:tracking-editorial">
+                              <p className="mt-1 max-w-full break-words text-[10px] uppercase leading-snug text-cream/70 md:tracking-editorial">
                                 <span className="md:hidden">
                                   {availabilityMobileDisplay(item.availabilityLabel)}
                                 </span>
@@ -204,16 +204,16 @@ export function WeekendBreakfastSection() {
                               </p>
                             ) : null}
                             {item.meatChoiceRequired ? (
-                              <span className="mt-1 inline-block max-w-full rounded-full border border-accent-green/40 bg-accent-green/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-green">
+                              <span className="mt-1 inline-block max-w-full rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75">
                                 Choice of meat
                               </span>
                             ) : null}
                             {item.optionGroups?.some((g) => g.required) ? (
                               <>
-                                <span className="mt-1 hidden max-w-full rounded-full border border-accent-orange/50 bg-accent-orange/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-orange md:inline-block">
+                                <span className="mt-1 hidden max-w-full rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75 md:inline-block">
                                   Choose options
                                 </span>
-                                <span className="mt-1 inline-block w-fit max-w-full rounded-full border border-accent-orange/50 bg-accent-orange/10 px-2 py-0.5 text-xs uppercase tracking-[0.12em] text-accent-orange md:hidden">
+                                <span className="mt-1 inline-block w-fit max-w-full rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-xs uppercase tracking-[0.12em] text-cream/75 md:hidden">
                                   Options
                                 </span>
                               </>

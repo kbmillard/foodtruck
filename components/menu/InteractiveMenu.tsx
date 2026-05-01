@@ -127,7 +127,7 @@ export function InteractiveMenu() {
   return (
     <section
       id="menu"
-      className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-gradient-to-b from-menu-plum via-plum to-charcoal py-24"
+      className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-charcoal py-24"
     >
       <div className="mx-auto w-full min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
         <div
@@ -201,7 +201,7 @@ export function InteractiveMenu() {
                 </div>
                 {showSwipeCue ? (
                   <div
-                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-menu-plum from-[18%] to-transparent lg:hidden"
+                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-charcoal from-[18%] to-transparent lg:hidden"
                     aria-hidden
                   />
                 ) : null}
@@ -275,17 +275,17 @@ export function InteractiveMenu() {
                               <div className="min-w-0 flex-1 overflow-hidden">
                                 <PriceRow name={item.name} price={item.price} />
                                 {item.includesFries ? (
-                                  <span className="mt-1 inline-block rounded-full border border-accent-cyan/40 bg-accent-cyan/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-cyan">
+                                  <span className="mt-1 inline-block rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75">
                                     With fries
                                   </span>
                                 ) : null}
                                 {item.meatChoiceRequired ? (
-                                  <span className="mt-1 inline-block rounded-full border border-accent-green/40 bg-accent-green/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-green">
+                                  <span className="mt-1 inline-block rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75">
                                     Choice of meat
                                   </span>
                                 ) : null}
                                 {item.optionGroups?.some((g) => g.required) ? (
-                                  <span className="mt-1 inline-block rounded-full border border-accent-orange/50 bg-accent-orange/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-orange">
+                                  <span className="mt-1 inline-block rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75">
                                     Choose options
                                   </span>
                                 ) : null}

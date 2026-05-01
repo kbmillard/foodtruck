@@ -164,7 +164,7 @@ export function OrderDrawer() {
                             </span>
                           </div>
                           {line.selectedMeat ? (
-                            <p className="mt-1 text-xs text-accent-green">{line.selectedMeat}</p>
+                            <p className="mt-1 text-xs text-cream/65">{line.selectedMeat}</p>
                           ) : null}
                           {line.selectedOptions && Object.keys(line.selectedOptions).length > 0
                             ? Object.entries(line.selectedOptions).map(([gid, val]) => {
@@ -174,14 +174,14 @@ export function OrderDrawer() {
                                   ? formatOptionLine(group, val)
                                   : `${gid}: ${val}`;
                                 return (
-                                  <p key={gid} className="mt-1 text-xs text-accent-orange">
+                                  <p key={gid} className="mt-1 text-xs text-cream/70">
                                     {label}
                                   </p>
                                 );
                               })
                             : null}
                           {line.includesFries ? (
-                            <span className="mt-1 inline-block rounded-full border border-accent-cyan/40 bg-accent-cyan/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-cyan">
+                            <span className="mt-1 inline-block rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75">
                               With fries
                             </span>
                           ) : null}

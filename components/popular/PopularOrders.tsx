@@ -54,7 +54,7 @@ export function PopularOrders() {
                     sizes="(min-width: 1024px) 33vw, 50vw"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-salsa/40 via-menu-plum to-charcoal" />
+                  <div className="absolute inset-0 bg-charcoal" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/30 to-transparent" />
                 <span className="absolute inset-x-0 bottom-0 p-4 text-xs uppercase tracking-editorial text-cream">
@@ -96,7 +96,7 @@ export function PopularOrders() {
               >
                 <X className="h-4 w-4" />
               </button>
-              <div className="relative mb-4 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-menu-plum">
+              <div className="relative mb-4 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-charcoal">
                 {openItem.imageUrl ? (
                   <Image
                     src={openItem.imageUrl}

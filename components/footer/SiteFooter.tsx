@@ -38,7 +38,7 @@ export function SiteFooter() {
   return (
     <footer
       id="contact"
-      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-black py-16"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-charcoal py-16"
     >
       <div className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 sm:flex-row sm:justify-between sm:px-8">
         <div className="max-w-sm space-y-4">

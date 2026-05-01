@@ -1,39 +1,27 @@
 import type { MenuCategoryColor } from "./schema";
 
+/** Active category tile — matches hero/outline CTA (cream ring on charcoal). */
 export function categoryActiveRing(color: MenuCategoryColor): string {
-  switch (color) {
-    case "cyan":
-      return "ring-2 ring-accent-cyan/70";
-    case "green":
-      return "ring-2 ring-accent-green/70";
-    case "yellow":
-      return "ring-2 ring-accent-yellow/80";
-    case "pink":
-      return "ring-2 ring-accent-pink/70";
-    case "orange":
-      return "ring-2 ring-accent-orange/70";
-    case "red":
-      return "ring-2 ring-accent-red/70";
-    default:
-      return "ring-2 ring-cream/40";
-  }
+  void color;
+  return "ring-2 ring-cream/50";
 }
 
+/** In-panel hero plate — charcoal-first like the hero image wash, subtle accent tint only. */
 export function categoryHeroGradient(color: MenuCategoryColor): string {
   switch (color) {
     case "cyan":
-      return "from-accent-cyan/30 via-menu-plum to-plum";
+      return "from-accent-cyan/12 via-charcoal to-charcoal";
     case "green":
-      return "from-accent-green/25 via-menu-plum to-plum";
+      return "from-accent-green/12 via-charcoal to-charcoal";
     case "yellow":
-      return "from-accent-yellow/25 via-menu-plum to-plum";
+      return "from-accent-yellow/12 via-charcoal to-charcoal";
     case "pink":
-      return "from-accent-pink/25 via-menu-plum to-plum";
+      return "from-accent-pink/12 via-charcoal to-charcoal";
     case "orange":
-      return "from-accent-orange/25 via-menu-plum to-plum";
+      return "from-accent-orange/12 via-charcoal to-charcoal";
     case "red":
-      return "from-accent-red/25 via-menu-plum to-plum";
+      return "from-accent-red/12 via-charcoal to-charcoal";
     default:
-      return "from-cream/10 via-menu-plum to-plum";
+      return "from-white/5 via-charcoal to-charcoal";
   }
 }
