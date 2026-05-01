@@ -65,6 +65,14 @@ export function SiteFooter() {
             >
               Instagram
             </a>
+            <a
+              className="text-cream underline-offset-4 hover:underline"
+              href={CONTACT.facebookUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Facebook
+            </a>
           </div>
         </div>
         <div className="grid gap-8 sm:grid-cols-2">

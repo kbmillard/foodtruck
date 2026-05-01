@@ -21,10 +21,10 @@ export const TRUCK = {
     "Catch the truck where KC eats — parked at Al Halal Grocery for late-night tortas, birria, and burgers hot off the plancha.",
 } as const;
 
-/** Hours from printed menu; follow Instagram for extra service days or changes. */
+/** Hours from printed menu; follow social for extra service days or changes. */
 export const HOURS_LINES = [
   "Open 5:00 PM – 11:00 PM",
-  "Updates and special hours: @la_hamburguesaloca on Instagram",
+  "Updates and special hours: @la_hamburguesaloca on Instagram and Facebook",
 ] as const;
 
 export const CONTACT = {
@@ -33,6 +33,7 @@ export const CONTACT = {
   email: "lahamburguesaloca@yahoo.com",
   socialHandle: "@la_hamburguesaloca",
   socialUrl: "https://www.instagram.com/la_hamburguesaloca/",
+  facebookUrl: "https://www.facebook.com/LaHamburguesaLoca",
 } as const;
 
 export const TRUCK_STATUS_OPTIONS = [
