@@ -1,6 +1,6 @@
 /**
- * Generates PNG/WebP/ICO in public/icons from scripts/brand-source.svg
- * so paths match la_hamburguesa_loca_web_assets README until real assets are copied.
+ * Generates PNG/WebP/ICO in public/icons from the same raster logo used in-app
+ * (`public/images/brand/prologue-logo.webp`). Falls back to `brand-source.svg` if missing.
  */
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -12,24 +12,43 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const outDir = path.join(root, "public", "icons");
 const svgPath = path.join(__dirname, "brand-source.svg");
+const rasterLogoPath = path.join(root, "public", "images", "brand", "prologue-logo.webp");
 
 const sizes = [16, 32, 48, 64, 96, 128, 152, 180, 192, 256, 384, 512, 1024];
 
+/** Square output, transparent letterboxing so circular marks stay crisp in tabs. */
+function sourcePipeline(buf) {
+  return sharp(buf);
+}
+
 async function main() {
   await fs.mkdir(outDir, { recursive: true });
-  const svg = await fs.readFile(svgPath);
+  let input;
+  try {
+    await fs.access(rasterLogoPath);
+    input = await fs.readFile(rasterLogoPath);
+  } catch {
+    console.warn("generate-brand-icons: using brand-source.svg (prologue-logo.webp not found)");
+    input = await fs.readFile(svgPath);
+  }
 
   const pngBuffers = [];
   for (const s of [16, 32, 48]) {
     pngBuffers.push(
-      await sharp(svg).resize(s, s).png().toBuffer(),
+      await sourcePipeline(input)
+        .resize(s, s, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .png()
+        .toBuffer(),
     );
   }
   const ico = await toIco(pngBuffers);
   await fs.writeFile(path.join(outDir, "favicon.ico"), ico);
 
   for (const s of sizes) {
-    const buf = await sharp(svg).resize(s, s).png().toBuffer();
+    const buf = await sourcePipeline(input)
+      .resize(s, s, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .png()
+      .toBuffer();
     await fs.writeFile(
       path.join(outDir, `la-hamburguesa-loca-logo-${s}x${s}.png`),
       buf,
@@ -37,7 +56,10 @@ async function main() {
   }
 
   for (const s of [256, 512, 1024]) {
-    const buf = await sharp(svg).resize(s, s).webp({ quality: 90 }).toBuffer();
+    const buf = await sourcePipeline(input)
+      .resize(s, s, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .webp({ quality: 90 })
+      .toBuffer();
     await fs.writeFile(
       path.join(outDir, `la-hamburguesa-loca-logo-${s}x${s}.webp`),
       buf,
