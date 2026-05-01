@@ -6,6 +6,7 @@ import { CONTACT, HOURS_LINES } from "@/lib/data/locations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { useLocationsCatalog } from "@/context/LocationsCatalogContext";
 import type { LocationItem } from "@/lib/locations/schema";
+import { LocationPublicStatus } from "@/components/locations/LocationPublicStatus";
 import {
   formatAddressLine,
   resolvedAppleMapsUrl,
@@ -17,8 +18,6 @@ import { GoogleMapClientResolved } from "@/components/locations/GoogleMapClientR
 import { GoogleMapGreedy } from "@/components/locations/GoogleMapGreedy";
 
 function cardDescription(loc: LocationItem): string {
-  const note = loc.statusNote?.trim();
-  if (note) return note;
   if (loc.type === "restaurant") {
     return "Our brick-and-mortar home on Southwest Blvd — the same flavors that started on four wheels, now with room for the whole neighborhood.";
   }
@@ -92,6 +91,10 @@ export function LocationsSection() {
           className="mt-12 scroll-mt-[calc(var(--nav-h)+16px)] rounded-3xl border border-white/10 bg-black/30 p-8"
         >
           <p className="text-xs uppercase tracking-editorial text-cream/60">Hours</p>
+          <p className="mt-2 text-xs text-cream/50">
+            Open/closed badges use Kansas City time (America/Chicago), including weekend breakfast
+            and evening windows.
+          </p>
           <ul className="mt-3 space-y-2 text-cream/85">
             {!loading && data?.locations.length
               ? data.locations.map((loc) => (
@@ -122,12 +125,7 @@ export function LocationsSection() {
                 <ul className="mt-4 space-y-6">
                   {trucks.map((t) => (
                     <li key={t.id} className="border-b border-white/10 pb-6 last:border-0 last:pb-0">
-                      <p className="font-display text-3xl text-cream">
-                        {t.status?.trim() || "—"}
-                      </p>
-                      {t.statusNote?.trim() ? (
-                        <p className="mt-2 max-w-xl text-sm text-cream/75">{t.statusNote.trim()}</p>
-                      ) : null}
+                      <LocationPublicStatus location={t} variant="truck" showNote />
                       <p className="mt-2 text-xs uppercase tracking-editorial text-cream/50">
                         {t.name}
                       </p>
@@ -212,13 +210,7 @@ function LocationCard({ loc }: { loc: LocationItem }) {
           ))}
         </div>
       </div>
-      {loc.status?.trim() || loc.statusNote?.trim() ? (
-        <p className="mt-3 text-xs text-accent-green">
-          {loc.status?.trim() ? <span className="font-semibold">{loc.status.trim()}</span> : null}
-          {loc.status?.trim() && loc.statusNote?.trim() ? " · " : null}
-          {loc.statusNote?.trim() ?? ""}
-        </p>
-      ) : null}
+      <LocationPublicStatus location={loc} variant="card" showNote />
       <p className="mt-4 text-sm leading-relaxed text-cream/70">{cardDescription(loc)}</p>
       <div className="mt-6 flex flex-wrap gap-2">
         <MapButton label="Google Maps" href={resolvedMapsUrl(loc)} />
@@ -271,6 +263,7 @@ function MapEmbedBlock({ loc }: { loc: LocationItem }) {
         {loc.label?.trim() || loc.name}
       </p>
       <p className="mt-1 text-sm text-cream/80">{line}</p>
+      <LocationPublicStatus location={loc} variant="map" showNote />
       {useGreedyJsMap && lat != null && lng != null ? (
         <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
           <GoogleMapGreedy

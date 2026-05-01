@@ -57,6 +57,8 @@ export function parseLocationsFromCsvText(csvText: string): LocationItem[] {
   const iPlaceId = idx("placeid");
   const iFormatted = idx("formattedaddress");
   const iUpdated = idx("lastupdated");
+  const iTimezone = idx("timezone");
+  const iWeeklyHoursJson = idx("weeklyhoursjson");
 
   if (iType < 0 || iName < 0) return [];
 
@@ -110,6 +112,14 @@ export function parseLocationsFromCsvText(csvText: string): LocationItem[] {
     if (iFormatted >= 0) {
       const fa = (row[iFormatted] ?? "").trim();
       if (fa) item.formattedAddress = fa;
+    }
+    if (iTimezone >= 0) {
+      const tz = (row[iTimezone] ?? "").trim();
+      if (tz) item.timezone = tz;
+    }
+    if (iWeeklyHoursJson >= 0) {
+      const wh = (row[iWeeklyHoursJson] ?? "").trim();
+      if (wh) item.weeklyHoursJson = wh;
     }
     items.push(item);
   }

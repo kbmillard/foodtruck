@@ -25,6 +25,10 @@ export type LocationItem = {
   lat: number | null;
   lng: number | null;
   lastUpdated: string;
+  /** IANA timezone for public hours (default America/Chicago in code). */
+  timezone?: string;
+  /** Optional CSV JSON override for weekly windows; invalid values are ignored. */
+  weeklyHoursJson?: string;
   placeId?: string;
   formattedAddress?: string;
   geocodeSource?: LocationGeocodeSource;

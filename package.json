@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "validate:sheets": "node scripts/run-sheet-validation.mjs",
+    "validate:location-hours": "tsx scripts/validate-location-hours.ts",
     "icons": "node scripts/generate-brand-icons.mjs",
     "postinstall": "node scripts/generate-brand-icons.mjs"
   },
