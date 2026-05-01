@@ -48,7 +48,7 @@ export function LocationsSection() {
   return (
     <section
       id="locations"
-      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 py-24"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] py-24"
     >
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <div id="locations-start" tabIndex={-1} className="outline-none focus:outline-none">

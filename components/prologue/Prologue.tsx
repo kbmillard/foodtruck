@@ -19,7 +19,7 @@ export function Prologue() {
   return (
     <section
       id="prologue"
-      className="relative min-h-[520px] overflow-hidden border-t border-white/10 py-24 sm:min-h-[580px]"
+      className="relative min-h-[520px] overflow-hidden py-24 sm:min-h-[580px]"
     >
       {/* Solid base — hero keeps the burger photo; Prologue uses only the mark as atmosphere */}
       <div className="pointer-events-none absolute inset-0 bg-charcoal" aria-hidden />

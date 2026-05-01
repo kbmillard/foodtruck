@@ -121,7 +121,7 @@ export function WeekendBreakfastSection() {
   return (
     <div
       id="weekend-breakfast"
-      className="scroll-mt-[calc(var(--nav-h)+16px)] mt-10 w-full max-w-full overflow-x-hidden border-t border-white/10 bg-charcoal py-12 md:py-20"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] mt-10 w-full max-w-full overflow-x-hidden bg-charcoal py-12 md:py-20"
     >
       <div className="mx-auto w-full max-w-full px-4 sm:px-5 md:px-8">
         <div

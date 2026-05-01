@@ -21,7 +21,7 @@ export function PopularOrders() {
   }, [data]);
 
   return (
-    <section id="popular" className="border-t border-white/10 py-24">
+    <section id="popular" className="py-24">
       <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
           kicker="Popular orders"

@@ -13,7 +13,7 @@ export function EssenceSection() {
   const open = ESSENCE_CARDS.find((c) => c.id === openId) ?? ESSENCE_CARDS[0];
 
   return (
-    <section id="essence" className="border-t border-white/10 py-24">
+    <section id="essence" className="py-24">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <SectionHeading
           kicker="Essence"

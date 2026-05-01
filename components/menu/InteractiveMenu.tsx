@@ -127,7 +127,7 @@ export function InteractiveMenu() {
   return (
     <section
       id="menu"
-      className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-charcoal py-24"
+      className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] bg-charcoal py-24"
     >
       <div className="mx-auto w-full min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
         <div
@@ -137,7 +137,7 @@ export function InteractiveMenu() {
         >
           <SectionHeading
             kicker="Menu"
-            title="Auténtico Sazón Mexicano — one interactive board."
+            title="Auténtico Sazón Mexicano."
             subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
           />
         </div>

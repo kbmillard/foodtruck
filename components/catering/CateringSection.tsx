@@ -29,7 +29,7 @@ export function CateringSection() {
   return (
     <section
       id="catering"
-      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 py-24"
+      className="scroll-mt-[calc(var(--nav-h)+16px)] py-24"
     >
       <div className="mx-auto max-w-[1100px] px-5 sm:px-8">
         <div id="catering-start" tabIndex={-1} className="outline-none focus:outline-none">
