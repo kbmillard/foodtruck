@@ -18,7 +18,7 @@ import { categoryActiveRing, categoryHeroGradient } from "@/lib/menu/category-st
 
 function MenuSkeleton() {
   return (
-    <div className="mt-14 animate-pulse space-y-4">
+    <div className="mt-10 animate-pulse space-y-4">
       <div className="h-12 rounded-2xl bg-white/10" />
       <div className="h-64 rounded-3xl bg-white/10" />
     </div>
@@ -28,22 +28,10 @@ function MenuSkeleton() {
 function PriceRow({ name, price }: { name: string; price: number | null }) {
   const priceLabel = price === null ? "Price TBD" : `$${price.toFixed(2)}`;
   return (
-    <>
-      <div className="flex min-w-0 items-start justify-between gap-3 md:hidden">
-        <span className="min-w-0 flex-1 break-words font-medium leading-snug text-cream line-clamp-3">
-          {name}
-        </span>
-        <span className="shrink-0 whitespace-nowrap text-sm text-cream/85">{priceLabel}</span>
-      </div>
-      <div className="hidden min-w-0 items-baseline gap-2 md:flex">
-        <span className="truncate font-medium text-cream">{name}</span>
-        <span
-          className="min-w-[1rem] flex-1 border-b border-dotted border-cream/25"
-          aria-hidden
-        />
-        <span className="shrink-0 text-sm text-cream/85">{priceLabel}</span>
-      </div>
-    </>
+    <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+      <p className="min-w-0 break-words font-medium leading-snug text-cream">{name}</p>
+      <p className="shrink-0 text-sm leading-snug text-cream/85 sm:pt-0.5">{priceLabel}</p>
+    </div>
   );
 }
 
@@ -130,28 +118,29 @@ export function InteractiveMenu() {
       className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] bg-charcoal py-24"
     >
       <div className="mx-auto w-full min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
-        <div
-          id="menu-start"
-          tabIndex={-1}
-          className="w-full min-w-0 max-w-full outline-none focus:outline-none"
-        >
-          <SectionHeading
-            kicker="Menu"
-            title="Auténtico Sazón Mexicano."
-            subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
-          />
-        </div>
+        <div className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/40 p-4 outline-none sm:p-5 md:rounded-3xl md:p-10">
+          <div
+            id="menu-start"
+            tabIndex={-1}
+            className="w-full min-w-0 max-w-full outline-none focus:outline-none"
+          >
+            <SectionHeading
+              kicker="Menu"
+              title="Auténtico Sazón Mexicano."
+              subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
+            />
+          </div>
 
-        {error ? (
-          <p className="mt-6 rounded-xl border border-salsa/40 bg-salsa/10 p-4 text-sm text-cream">
-            {error} — refresh the page. If this persists, the menu API may be unreachable.
-          </p>
-        ) : null}
+          {error ? (
+            <p className="mt-6 rounded-xl border border-salsa/40 bg-salsa/10 p-4 text-sm text-cream">
+              {error} — refresh the page. If this persists, the menu API may be unreachable.
+            </p>
+          ) : null}
 
-        {loading || !data ? (
-          <MenuSkeleton />
-        ) : (
-          <div className="mt-14 grid w-full min-w-0 max-w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+          {loading || !data ? (
+            <MenuSkeleton />
+          ) : (
+            <div className="mt-10 grid w-full min-w-0 max-w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
             <div className="min-w-0 w-full max-w-full">
               <div
                 className={cn(
@@ -201,7 +190,7 @@ export function InteractiveMenu() {
                 </div>
                 {showSwipeCue ? (
                   <div
-                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-charcoal from-[18%] to-transparent lg:hidden"
+                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-[#0a0a0a] from-[18%] to-transparent lg:hidden"
                     aria-hidden
                   />
                 ) : null}
@@ -272,7 +261,7 @@ export function InteractiveMenu() {
                                   </div>
                                 )}
                               </div>
-                              <div className="min-w-0 flex-1 overflow-hidden">
+                              <div className="min-w-0 flex-1">
                                 <PriceRow name={item.name} price={item.price} />
                                 {item.includesFries ? (
                                   <span className="mt-1 inline-block rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-cream/75">
@@ -320,8 +309,9 @@ export function InteractiveMenu() {
                 ) : null}
               </AnimatePresence>
             </div>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
 
         <WeekendBreakfastSection />
       </div>

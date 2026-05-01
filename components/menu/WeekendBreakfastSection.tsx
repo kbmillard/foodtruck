@@ -12,6 +12,7 @@ import { MeatChoiceModal } from "@/components/menu/MeatChoiceModal";
 import { MenuOptionGroupsModal } from "@/components/menu/MenuOptionGroupsModal";
 import { cn } from "@/lib/utils/cn";
 import { categoryActiveRing, categoryHeroGradient } from "@/lib/menu/category-styles";
+import { englishSublineWithoutClock } from "@/lib/menu/strip-clock-from-label";
 
 const SUBSECTIONS: { section: string; title: string; kicker: string; blurb?: string }[] = [
   {
@@ -29,24 +30,10 @@ const PANEL_COLORS: MenuCategoryColor[] = ["orange", "yellow", "red"];
 function BreakfastPriceRow({ name, price }: { name: string; price: number | null }) {
   const priceStr = price === null ? "Price TBD" : `$${price.toFixed(2)}`;
   return (
-    <>
-      <div className="flex min-w-0 items-start justify-between gap-3 md:hidden">
-        <span className="min-w-0 flex-1 break-words text-base font-medium leading-snug text-cream line-clamp-2">
-          {name}
-        </span>
-        <span className="shrink-0 self-start text-sm text-cream/85 whitespace-nowrap">{priceStr}</span>
-      </div>
-      <div className="hidden min-w-0 items-baseline gap-2 md:flex">
-        <span className="line-clamp-2 min-w-0 shrink break-words font-medium leading-snug text-cream">
-          {name}
-        </span>
-        <span
-          className="min-w-[1rem] flex-1 border-b border-dotted border-cream/25"
-          aria-hidden
-        />
-        <span className="shrink-0 text-sm text-cream/85">{priceStr}</span>
-      </div>
-    </>
+    <div className="flex min-w-0 flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+      <p className="min-w-0 break-words text-base font-medium leading-snug text-cream">{name}</p>
+      <p className="shrink-0 text-sm leading-snug text-cream/85 sm:pt-0.5">{priceStr}</p>
+    </div>
   );
 }
 
@@ -224,7 +211,7 @@ export function WeekendBreakfastSection() {
                   </div>
                   {showSwipeCue ? (
                     <div
-                      className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-charcoal from-[18%] to-transparent lg:hidden"
+                      className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-[#0a0a0a] from-[18%] to-transparent lg:hidden"
                       aria-hidden
                     />
                   ) : null}
@@ -274,7 +261,9 @@ export function WeekendBreakfastSection() {
                       </div>
 
                       <div className="min-w-0 w-full max-w-full space-y-4">
-                        {activeItems.map((item) => (
+                        {activeItems.map((item) => {
+                          const englishSub = englishSublineWithoutClock(item.englishName);
+                          return (
                           <article
                             key={item.id}
                             className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-charcoal/50 p-4 sm:p-5"
@@ -297,9 +286,9 @@ export function WeekendBreakfastSection() {
                               </div>
                               <div className="min-w-0 w-full max-w-full flex-1">
                                 <BreakfastPriceRow name={item.name} price={item.price} />
-                                {item.englishName ? (
+                                {englishSub ? (
                                   <p className="mt-0.5 break-words text-xs text-cream/55">
-                                    {item.englishName}
+                                    {englishSub}
                                   </p>
                                 ) : null}
                                 {item.meatChoiceRequired ? (
@@ -343,7 +332,8 @@ export function WeekendBreakfastSection() {
                               </div>
                             </div>
                           </article>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   </motion.div>
