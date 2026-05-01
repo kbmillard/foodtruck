@@ -2,6 +2,8 @@ export type LocationType = "restaurant" | "food_truck";
 
 export type LocationsSource = "google-sheet" | "local-fallback";
 
+export type LocationGeocodeSource = "sheet" | "google-geocode" | "fallback";
+
 export type LocationItem = {
   id: string;
   active: boolean;
@@ -23,6 +25,12 @@ export type LocationItem = {
   lat: number | null;
   lng: number | null;
   lastUpdated: string;
+  placeId?: string;
+  formattedAddress?: string;
+  geocodeSource?: LocationGeocodeSource;
+  geocodedAt?: string;
+  /** Server-built Maps Embed v1 URL (uses NEXT_PUBLIC key only; never secret keys). */
+  mapEmbedSrc?: string;
 };
 
 export type LocationsResponse = {

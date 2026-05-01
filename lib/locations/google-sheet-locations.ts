@@ -54,6 +54,8 @@ export function parseLocationsFromCsvText(csvText: string): LocationItem[] {
   const iEmbed = idx("embedurl");
   const iLat = idx("lat");
   const iLng = idx("lng");
+  const iPlaceId = idx("placeid");
+  const iFormatted = idx("formattedaddress");
   const iUpdated = idx("lastupdated");
 
   if (iType < 0 || iName < 0) return [];
@@ -79,7 +81,7 @@ export function parseLocationsFromCsvText(csvText: string): LocationItem[] {
 
     const sortOrder = iSort >= 0 ? Number(row[iSort] ?? "0") || 0 : 0;
 
-    items.push({
+    const item: LocationItem = {
       id,
       active: true,
       type,
@@ -100,7 +102,16 @@ export function parseLocationsFromCsvText(csvText: string): LocationItem[] {
       lat: iLat >= 0 ? parseLatLng(row[iLat] ?? "") : null,
       lng: iLng >= 0 ? parseLatLng(row[iLng] ?? "") : null,
       lastUpdated: iUpdated >= 0 ? (row[iUpdated] ?? "").trim() : "",
-    });
+    };
+    if (iPlaceId >= 0) {
+      const pid = (row[iPlaceId] ?? "").trim();
+      if (pid) item.placeId = pid;
+    }
+    if (iFormatted >= 0) {
+      const fa = (row[iFormatted] ?? "").trim();
+      if (fa) item.formattedAddress = fa;
+    }
+    items.push(item);
   }
 
   return items;
