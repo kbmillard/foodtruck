@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { HERO_BACKGROUND_IMAGE } from "@/lib/data/hero-background";
+
+const LOGO = "/images/brand/prologue-logo.webp";
 
 const STATS = [
   "16 Years Family-Owned",
@@ -20,18 +21,26 @@ export function Prologue() {
       id="prologue"
       className="relative min-h-[520px] overflow-hidden border-t border-white/10 py-24 sm:min-h-[580px]"
     >
-      <Image
-        src={HERO_BACKGROUND_IMAGE}
-        alt=""
-        fill
-        className="object-cover"
-        sizes="100vw"
-        aria-hidden
-      />
-      {/* Same treatment as Hero: plate + atmosphere */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-charcoal/20" />
-      {/* Extra top scrim so Prologue copy stays legible (text sits higher than Hero headline) */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[52%] bg-gradient-to-b from-charcoal via-charcoal/65 to-transparent" />
+      {/* Solid base — hero keeps the burger photo; Prologue uses only the mark as atmosphere */}
+      <div className="pointer-events-none absolute inset-0 bg-charcoal" aria-hidden />
+
+      {/* Oversized logo watermark (same asset as foreground), hero-style full-bleed presence */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
+        <div className="relative aspect-square w-[min(130vw,56rem)] opacity-[0.12] sm:w-[min(115vw,60rem)] sm:opacity-[0.14]">
+          <Image
+            src={LOGO}
+            alt=""
+            fill
+            className="object-contain blur-[1.5px] sm:blur-[1px]"
+            sizes="(max-width: 768px) 900px, 960px"
+          />
+        </div>
+      </div>
+
+      {/* Readability washes (same language as Hero gradients, tuned for logo + copy layout) */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/80 to-charcoal/35" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-charcoal via-charcoal/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_75%_at_50%_42%,transparent_0%,rgba(26,26,26,0.5)_72%,rgba(26,26,26,0.92)_100%)]" />
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
@@ -50,7 +59,7 @@ export function Prologue() {
         >
           <div className="relative aspect-square w-[min(9.5rem,42vw)] max-w-[160px] sm:w-40">
             <Image
-              src="/images/brand/prologue-logo.webp"
+              src={LOGO}
               alt="La Hamburguesa Loca — circular logo with LHL mark"
               fill
               className="object-contain drop-shadow-[0_12px_36px_rgba(0,0,0,0.65)]"
