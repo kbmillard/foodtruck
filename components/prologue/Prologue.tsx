@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { HERO_BACKGROUND_IMAGE } from "@/lib/data/hero-background";
 
 const STATS = [
   "16 Years Family-Owned",
@@ -15,8 +16,24 @@ const STATS = [
 
 export function Prologue() {
   return (
-    <section id="prologue" className="border-t border-white/10 bg-charcoal py-24">
-      <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
+    <section
+      id="prologue"
+      className="relative min-h-[520px] overflow-hidden border-t border-white/10 py-24 sm:min-h-[580px]"
+    >
+      <Image
+        src={HERO_BACKGROUND_IMAGE}
+        alt=""
+        fill
+        className="object-cover"
+        sizes="100vw"
+        aria-hidden
+      />
+      {/* Same treatment as Hero: plate + atmosphere */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-charcoal/20" />
+      {/* Extra top scrim so Prologue copy stays legible (text sits higher than Hero headline) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[52%] bg-gradient-to-b from-charcoal via-charcoal/65 to-transparent" />
+
+      <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
           kicker="Prologue"
           title="Quiet confidence. Loud flavors."
@@ -31,32 +48,18 @@ export function Prologue() {
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto mt-10 flex flex-col items-center sm:mt-12"
         >
-          {/* No outer card — only a circular iOS-style glass disc on the section charcoal */}
-          <div className="relative flex flex-col items-center">
-            <div className="relative grid h-[min(11rem,46vw)] w-[min(11rem,46vw)] max-h-[180px] max-w-[180px] place-items-center sm:h-44 sm:w-44">
-              <div
-                aria-hidden
-                className="absolute inset-0 rounded-full border border-white/20 bg-gradient-to-b from-white/[0.2] via-white/[0.07] to-white/[0.03] shadow-[0_14px_44px_-12px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-10px_24px_-14px_rgba(0,0,0,0.4)] backdrop-blur-2xl backdrop-saturate-[1.4]"
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br from-white/35 via-white/5 to-transparent opacity-45 mix-blend-overlay"
-              />
-              <div className="relative z-10 aspect-square w-[72%]">
-                <Image
-                  src="/images/brand/prologue-logo.webp"
-                  alt="La Hamburguesa Loca — circular logo with LHL mark"
-                  fill
-                  className="object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.45)]"
-                  sizes="(max-width: 640px) 140px, 144px"
-                />
-              </div>
-            </div>
-
-            <p className="mt-7 text-center text-[10px] uppercase tracking-editorial text-cream/45">
-              Family-owned in KC
-            </p>
+          <div className="relative aspect-square w-[min(9.5rem,42vw)] max-w-[160px] sm:w-40">
+            <Image
+              src="/images/brand/prologue-logo.webp"
+              alt="La Hamburguesa Loca — circular logo with LHL mark"
+              fill
+              className="object-contain drop-shadow-[0_12px_36px_rgba(0,0,0,0.65)]"
+              sizes="(max-width: 640px) 152px, 160px"
+            />
           </div>
+          <p className="mt-7 text-center text-[10px] uppercase tracking-editorial text-cream/70">
+            Family-owned in KC
+          </p>
         </motion.div>
 
         <motion.ul
@@ -76,7 +79,7 @@ export function Prologue() {
                 hidden: { opacity: 0, y: 12 },
                 show: { opacity: 1, y: 0 },
               }}
-              className="rounded-2xl border border-white/10 bg-black/25 px-5 py-4 text-center text-xs uppercase tracking-editorial text-cream/80"
+              className="rounded-2xl border border-white/20 bg-black/30 px-5 py-4 text-center text-xs uppercase tracking-editorial text-cream/85 backdrop-blur-sm"
             >
               {s}
             </motion.li>

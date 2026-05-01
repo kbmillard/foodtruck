@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useOrder } from "@/context/OrderContext";
+import { HERO_BACKGROUND_ALT, HERO_BACKGROUND_IMAGE } from "@/lib/data/hero-background";
 
 export function Hero() {
   const { openOrderPanel, focusMenu, scrollToSection, focusCatering } = useOrder();
@@ -13,8 +14,8 @@ export function Hero() {
       className="relative flex min-h-[100svh] items-end overflow-hidden pt-[var(--nav-h)]"
     >
       <Image
-        src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=2000&q=80"
-        alt="Mexican-style loaded burger on a dark plate — hero dish at La Hamburguesa Loca in Kansas City"
+        src={HERO_BACKGROUND_IMAGE}
+        alt={HERO_BACKGROUND_ALT}
         fill
         priority
         className="object-cover"
