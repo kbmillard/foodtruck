@@ -144,7 +144,7 @@ export function EditorialNav() {
               animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10, scale: 0.98 }}
               transition={panelTransition}
-              className="pointer-events-auto fixed left-4 right-4 top-[calc(var(--nav-h)+12px)] z-[59] flex max-h-[calc(100dvh-120px)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#111]/90 shadow-2xl backdrop-blur-xl"
+              className="pointer-events-auto fixed left-4 right-4 top-[calc(var(--nav-h)+6px)] z-[59] flex max-h-[calc(100dvh-120px)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#111]/90 shadow-2xl backdrop-blur-xl"
               onPointerDown={(e) => e.stopPropagation()}
             >
               <span id={titleId} className="sr-only">
