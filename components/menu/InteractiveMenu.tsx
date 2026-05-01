@@ -26,17 +26,24 @@ function MenuSkeleton() {
 }
 
 function PriceRow({ name, price }: { name: string; price: number | null }) {
+  const priceLabel = price === null ? "Price TBD" : `$${price.toFixed(2)}`;
   return (
-    <div className="flex min-w-0 items-baseline gap-2">
-      <span className="truncate font-medium text-cream">{name}</span>
-      <span
-        className="min-w-[1rem] flex-1 border-b border-dotted border-cream/25"
-        aria-hidden
-      />
-      <span className="shrink-0 text-sm text-cream/85">
-        {price === null ? "Price TBD" : `$${price.toFixed(2)}`}
-      </span>
-    </div>
+    <>
+      <div className="flex min-w-0 items-start justify-between gap-3 md:hidden">
+        <span className="min-w-0 flex-1 break-words font-medium leading-snug text-cream line-clamp-3">
+          {name}
+        </span>
+        <span className="shrink-0 whitespace-nowrap text-sm text-cream/85">{priceLabel}</span>
+      </div>
+      <div className="hidden min-w-0 items-baseline gap-2 md:flex">
+        <span className="truncate font-medium text-cream">{name}</span>
+        <span
+          className="min-w-[1rem] flex-1 border-b border-dotted border-cream/25"
+          aria-hidden
+        />
+        <span className="shrink-0 text-sm text-cream/85">{priceLabel}</span>
+      </div>
+    </>
   );
 }
 
@@ -120,10 +127,14 @@ export function InteractiveMenu() {
   return (
     <section
       id="menu"
-      className="scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-gradient-to-b from-menu-plum via-plum to-charcoal py-24"
+      className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] border-t border-white/10 bg-gradient-to-b from-menu-plum via-plum to-charcoal py-24"
     >
-      <div className="mx-auto min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
-        <div id="menu-start" tabIndex={-1} className="outline-none focus:outline-none">
+      <div className="mx-auto w-full min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
+        <div
+          id="menu-start"
+          tabIndex={-1}
+          className="w-full min-w-0 max-w-full outline-none focus:outline-none"
+        >
           <SectionHeading
             kicker="Menu"
             title="Auténtico Sazón Mexicano — one interactive board."
@@ -140,8 +151,8 @@ export function InteractiveMenu() {
         {loading || !data ? (
           <MenuSkeleton />
         ) : (
-          <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
-            <div className="min-w-0">
+          <div className="mt-14 grid w-full min-w-0 max-w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+            <div className="min-w-0 w-full max-w-full">
               <div
                 className={cn(
                   "mb-2 flex items-center justify-end gap-2 lg:hidden",
@@ -165,11 +176,11 @@ export function InteractiveMenu() {
                   </motion.span>
                 </span>
               </div>
-              <div className="relative min-w-0">
+              <div className="relative min-w-0 w-full max-w-full">
                 <div
                   ref={categoryScrollRef}
                   onScroll={onCategoryScroll}
-                  className="flex gap-3 overflow-x-auto overflow-y-hidden pb-2 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+                  className="flex max-w-full gap-3 overflow-x-auto overflow-y-hidden pb-2 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden"
                 >
                   {visibleMeta.map((cat) => (
                 <button
@@ -197,110 +208,118 @@ export function InteractiveMenu() {
               </div>
             </div>
 
-            <AnimatePresence mode="wait">
-              {active ? (
-                <motion.div
-                  key={active.id}
-                  id="menu-panel"
-                  tabIndex={-1}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.35 }}
-                  className="rounded-3xl border border-white/10 bg-black/35 p-6 sm:p-8"
-                >
-                  <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                    <div>
-                      <p className="text-xs uppercase tracking-editorial text-cream/60">
-                        {active.number} / {active.label}
-                      </p>
-                      <h3 className="mt-2 font-display text-4xl text-cream">{active.label}</h3>
-                      <p className="mt-4 text-sm leading-relaxed text-cream/75 sm:text-base">
-                        {active.subtitle}
-                      </p>
-                      <div
-                        className={cn(
-                          "relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br",
-                          categoryHeroGradient(active.color),
-                        )}
-                      >
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.12),transparent_55%)]" />
-                        <p className="absolute bottom-6 left-6 max-w-xs text-sm text-cream/90">
-                          Tap items on the right — meat or style choices open when required. Final
-                          price confirmed at pickup when not listed.
+            <div className="min-w-0 w-full max-w-full">
+              <AnimatePresence mode="wait">
+                {active ? (
+                  <motion.div
+                    key={active.id}
+                    id="menu-panel"
+                    tabIndex={-1}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.35 }}
+                    className="w-full min-w-0 max-w-full overflow-x-hidden rounded-3xl border border-white/10 bg-black/35 p-4 sm:p-8"
+                  >
+                    <div className="grid min-w-0 w-full max-w-full grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+                      <div className="min-w-0 w-full max-w-full">
+                        <p className="text-xs uppercase tracking-editorial text-cream/60">
+                          {active.number} / {active.label}
                         </p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      {items.map((item) => (
-                        <article
-                          key={item.id}
-                          className="rounded-2xl border border-white/10 bg-charcoal/50 p-4"
+                        <h3 className="mt-2 font-display text-4xl text-cream">{active.label}</h3>
+                        <p className="mt-4 text-sm leading-relaxed text-cream/75 sm:text-base">
+                          {active.subtitle}
+                        </p>
+                        <div
+                          className={cn(
+                            "relative mt-8 aspect-[4/3] w-full max-w-full overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br",
+                            categoryHeroGradient(active.color),
+                          )}
                         >
-                          <div className="flex gap-4">
-                            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black/40">
-                              {item.imageUrl ? (
-                                <Image
-                                  src={item.imageUrl}
-                                  alt={item.imageAlt ?? `${item.name} — ${active.label}`}
-                                  fill
-                                  className="object-cover"
-                                  sizes="96px"
-                                />
-                              ) : (
-                                <div className="flex h-full w-full items-center justify-center text-[10px] uppercase tracking-editorial text-cream/40">
-                                  LHL
+                          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.12),transparent_55%)]" />
+                          <p className="absolute bottom-4 left-4 right-4 max-w-none text-sm text-cream/90 md:bottom-6 md:left-6 md:right-auto md:max-w-xs">
+                            <span className="md:hidden">
+                              Tap an item below — meat or style choices open when required. Final
+                              price confirmed at pickup when not listed.
+                            </span>
+                            <span className="hidden md:inline">
+                              Tap items on the right — meat or style choices open when required. Final
+                              price confirmed at pickup when not listed.
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="min-w-0 w-full max-w-full space-y-4">
+                        {items.map((item) => (
+                          <article
+                            key={item.id}
+                            className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-charcoal/50 p-4 sm:p-5"
+                          >
+                            <div className="flex w-full min-w-0 gap-4">
+                              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black/40">
+                                {item.imageUrl ? (
+                                  <Image
+                                    src={item.imageUrl}
+                                    alt={item.imageAlt ?? `${item.name} — ${active.label}`}
+                                    fill
+                                    className="object-cover"
+                                    sizes="96px"
+                                  />
+                                ) : (
+                                  <div className="flex h-full w-full items-center justify-center text-[10px] uppercase tracking-editorial text-cream/40">
+                                    LHL
+                                  </div>
+                                )}
+                              </div>
+                              <div className="min-w-0 flex-1 overflow-hidden">
+                                <PriceRow name={item.name} price={item.price} />
+                                {item.includesFries ? (
+                                  <span className="mt-1 inline-block rounded-full border border-accent-cyan/40 bg-accent-cyan/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-cyan">
+                                    With fries
+                                  </span>
+                                ) : null}
+                                {item.meatChoiceRequired ? (
+                                  <span className="mt-1 inline-block rounded-full border border-accent-green/40 bg-accent-green/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-green">
+                                    Choice of meat
+                                  </span>
+                                ) : null}
+                                {item.optionGroups?.some((g) => g.required) ? (
+                                  <span className="mt-1 inline-block rounded-full border border-accent-orange/50 bg-accent-orange/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-orange">
+                                    Choose options
+                                  </span>
+                                ) : null}
+                                {item.description ? (
+                                  <p className="mt-2 break-words text-xs leading-relaxed text-cream/60">
+                                    {item.description}
+                                  </p>
+                                ) : null}
+                                <div className="mt-3 flex min-w-0 flex-wrap gap-2">
+                                  <button
+                                    type="button"
+                                    className="min-h-10 rounded-full bg-salsa px-3 py-1.5 text-[10px] font-semibold uppercase tracking-editorial text-cream hover:bg-salsa/90"
+                                    onClick={() => handleAdd(item)}
+                                  >
+                                    Add
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="min-h-10 rounded-full border border-white/15 px-3 py-1.5 text-[10px] uppercase tracking-editorial text-cream/80 hover:bg-white/5"
+                                    onClick={() => openOrderPanel()}
+                                  >
+                                    Notes
+                                  </button>
                                 </div>
-                              )}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <PriceRow name={item.name} price={item.price} />
-                              {item.includesFries ? (
-                                <span className="mt-1 inline-block rounded-full border border-accent-cyan/40 bg-accent-cyan/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-cyan">
-                                  With fries
-                                </span>
-                              ) : null}
-                              {item.meatChoiceRequired ? (
-                                <span className="mt-1 inline-block rounded-full border border-accent-green/40 bg-accent-green/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-green">
-                                  Choice of meat
-                                </span>
-                              ) : null}
-                              {item.optionGroups?.some((g) => g.required) ? (
-                                <span className="mt-1 inline-block rounded-full border border-accent-orange/50 bg-accent-orange/10 px-2 py-0.5 text-[10px] uppercase tracking-editorial text-accent-orange">
-                                  Choose options
-                                </span>
-                              ) : null}
-                              {item.description ? (
-                                <p className="mt-2 text-xs leading-relaxed text-cream/60">
-                                  {item.description}
-                                </p>
-                              ) : null}
-                              <div className="mt-3 flex flex-wrap gap-2">
-                                <button
-                                  type="button"
-                                  className="rounded-full bg-salsa px-3 py-1.5 text-[10px] font-semibold uppercase tracking-editorial text-cream hover:bg-salsa/90"
-                                  onClick={() => handleAdd(item)}
-                                >
-                                  Add
-                                </button>
-                                <button
-                                  type="button"
-                                  className="rounded-full border border-white/15 px-3 py-1.5 text-[10px] uppercase tracking-editorial text-cream/80 hover:bg-white/5"
-                                  onClick={() => openOrderPanel()}
-                                >
-                                  Notes
-                                </button>
                               </div>
                             </div>
-                          </div>
-                        </article>
-                      ))}
+                          </article>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            </div>
           </div>
         )}
 
