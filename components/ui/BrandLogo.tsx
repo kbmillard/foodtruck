@@ -17,7 +17,7 @@ export function BrandLogo({
   return (
     <div className={cn("relative shrink-0", className)} style={{ width, height }}>
       <Image
-        src="/icons/la-hamburguesa-loca-logo-256x256.webp"
+        src="/images/brand/prologue-logo.webp"
         alt="La Hamburguesa Loca logo"
         width={width}
         height={height}
