@@ -24,23 +24,22 @@ export function Prologue() {
       {/* Solid base — hero keeps the burger photo; Prologue uses only the mark as atmosphere */}
       <div className="pointer-events-none absolute inset-0 bg-charcoal" aria-hidden />
 
-      {/* Oversized logo watermark (same asset as foreground), hero-style full-bleed presence */}
+      {/* Big logo “plate” (hero parity): must sit UNDER light washes or 12% opacity + 3× charcoal layers reads as flat black */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-        <div className="relative aspect-square w-[min(130vw,56rem)] opacity-[0.12] sm:w-[min(115vw,60rem)] sm:opacity-[0.14]">
+        <div className="relative aspect-square w-[min(165vw,72rem)] sm:w-[min(150vw,80rem)]">
           <Image
             src={LOGO}
             alt=""
             fill
-            className="object-contain blur-[1.5px] sm:blur-[1px]"
-            sizes="(max-width: 768px) 900px, 960px"
+            className="object-contain opacity-[0.34] saturate-[1.08] sm:opacity-[0.4]"
+            sizes="100vw"
           />
         </div>
       </div>
 
-      {/* Readability washes (same language as Hero gradients, tuned for logo + copy layout) */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/80 to-charcoal/35" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[55%] bg-gradient-to-b from-charcoal via-charcoal/70 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_75%_at_50%_42%,transparent_0%,rgba(26,26,26,0.5)_72%,rgba(26,26,26,0.92)_100%)]" />
+      {/* Hero-style single wash + edge vignette — keep mid-field open so the mark reads */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/55 to-charcoal/10" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_70%_at_50%_38%,transparent_22%,rgba(26,26,26,0.35)_100%)]" />
 
       <div className="relative z-10 mx-auto max-w-[1200px] px-5 sm:px-8">
         <SectionHeading
