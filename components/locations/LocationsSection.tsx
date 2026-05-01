@@ -225,18 +225,34 @@ function LocationCard({ loc }: { loc: LocationItem }) {
   );
 }
 
+/** True only when the sheet provides a truly custom (non-Google) iframe URL. */
+function isThirdPartyEmbedUrl(url: string): boolean {
+  const u = url.trim().toLowerCase();
+  if (!u) return false;
+  return !u.includes("google.com") && !u.includes("maps.google.");
+}
+
+function parseCoord(n: number | null | undefined): number | null {
+  if (n == null) return null;
+  const v = Number(n);
+  return Number.isFinite(v) ? v : null;
+}
+
 function MapEmbedBlock({ loc }: { loc: LocationItem }) {
   const line = formatAddressLine(loc);
   const ownerEmbed = loc.embedUrl?.trim();
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY?.trim();
-  const coordsOk =
-    loc.lat != null &&
-    loc.lng != null &&
-    Number.isFinite(loc.lat) &&
-    Number.isFinite(loc.lng);
+  const lat = parseCoord(loc.lat);
+  const lng = parseCoord(loc.lng);
+  const coordsOk = lat != null && lng != null;
 
-  /** Maps JS API supports gestureHandling: greedy (no ⌘+scroll overlay). Embed API iframes do not. */
-  const useGreedyJsMap = !ownerEmbed && coordsOk && Boolean(apiKey);
+  /**
+   * Embed API iframes (including `mapEmbedSrc` / owner-pasted Google iframe URLs) always
+   * use cooperative “⌘ + scroll”. Prefer Maps JavaScript API with `gestureHandling: greedy`
+   * whenever we have coordinates + a public key — even if the Sheet has a Google embed URL.
+   */
+  const useGreedyJsMap =
+    coordsOk && Boolean(apiKey) && (!ownerEmbed || !isThirdPartyEmbedUrl(ownerEmbed));
   const src = useGreedyJsMap ? null : resolvedEmbedSrc(loc);
 
   return (
@@ -245,11 +261,11 @@ function MapEmbedBlock({ loc }: { loc: LocationItem }) {
         {loc.label?.trim() || loc.name}
       </p>
       <p className="mt-1 text-sm text-cream/80">{line}</p>
-      {useGreedyJsMap && loc.lat != null && loc.lng != null ? (
+      {useGreedyJsMap && lat != null && lng != null ? (
         <div className="mt-3 overflow-hidden rounded-2xl border border-white/10">
           <GoogleMapGreedy
-            lat={loc.lat}
-            lng={loc.lng}
+            lat={lat}
+            lng={lng}
             title={loc.name}
             className="h-[220px] w-full min-h-[220px] bg-charcoal"
           />

@@ -41,6 +41,7 @@ export function GoogleMapGreedy({ lat, lng, title, className }: Props) {
         streetViewControl: false,
         fullscreenControl: true,
       });
+      map.setOptions({ gestureHandling: "greedy" });
 
       new google.maps.Marker({
         map,
