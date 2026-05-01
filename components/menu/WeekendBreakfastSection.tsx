@@ -13,16 +13,24 @@ import { MenuOptionGroupsModal } from "@/components/menu/MenuOptionGroupsModal";
 import { cn } from "@/lib/utils/cn";
 import { categoryActiveRing, categoryHeroGradient } from "@/lib/menu/category-styles";
 import { englishSublineWithoutClock } from "@/lib/menu/strip-clock-from-label";
+import { navPrimaryLinkClass } from "@/lib/ui/nav-typography";
 
-const SUBSECTIONS: { section: string; title: string; kicker: string; blurb?: string }[] = [
+const SUBSECTIONS: {
+  section: string;
+  title: string;
+  kicker: string;
+  panelKickerEn: string;
+  blurb?: string;
+}[] = [
   {
     section: "Guisos",
     title: "Guisos / Stews",
     kicker: "01",
+    panelKickerEn: "Stews",
     blurb: "Available as tacos, burritos, gorditas harina, or gorditas maíz.",
   },
-  { section: "Desayunos", title: "Desayunos / Breakfast", kicker: "02" },
-  { section: "Caldos", title: "Caldos / Broths", kicker: "03" },
+  { section: "Desayunos", title: "Desayunos / Breakfast", kicker: "02", panelKickerEn: "Breakfast" },
+  { section: "Caldos", title: "Caldos / Broths", kicker: "03", panelKickerEn: "Broths" },
 ];
 
 const PANEL_COLORS: MenuCategoryColor[] = ["orange", "yellow", "red"];
@@ -149,9 +157,7 @@ export function WeekendBreakfastSection() {
           tabIndex={-1}
           className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/40 p-4 outline-none focus:outline-none sm:p-5 md:rounded-3xl md:p-10"
         >
-          <p className="text-xs tracking-editorial text-cream/60">
-            Desayuno de Fin de Semana
-          </p>
+          <p className={navPrimaryLinkClass}>Weekend Breakfast</p>
           <h2 className="mt-2 font-display text-3xl text-cream sm:text-4xl md:text-5xl">
             Desayuno de Fin de Semana
           </h2>
@@ -211,7 +217,7 @@ export function WeekendBreakfastSection() {
                   </div>
                   {showSwipeCue ? (
                     <div
-                      className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-[#0a0a0a] from-[18%] to-transparent lg:hidden"
+                      className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-charcoal from-[18%] to-transparent lg:hidden"
                       aria-hidden
                     />
                   ) : null}
@@ -232,8 +238,8 @@ export function WeekendBreakfastSection() {
                   >
                     <div className="grid min-w-0 w-full max-w-full grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr]">
                       <div className="min-w-0 w-full max-w-full">
-                        <p className="text-xs uppercase tracking-editorial text-cream/60">
-                          {activeMeta.kicker} / {activeMeta.title}
+                        <p className={navPrimaryLinkClass}>
+                          {activeMeta.kicker} / {activeMeta.panelKickerEn}
                         </p>
                         <h3 className="mt-2 font-display text-4xl text-cream">{activeMeta.title}</h3>
                         <p className="mt-4 text-sm leading-relaxed text-cream/75 sm:text-base">

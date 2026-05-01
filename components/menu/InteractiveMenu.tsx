@@ -15,10 +15,11 @@ import { MenuOptionGroupsModal } from "@/components/menu/MenuOptionGroupsModal";
 import { WeekendBreakfastSection } from "@/components/menu/WeekendBreakfastSection";
 import { itemRequiresOptionSelections } from "@/lib/menu/option-groups";
 import { categoryActiveRing, categoryHeroGradient } from "@/lib/menu/category-styles";
+import { navPrimaryLinkClass } from "@/lib/ui/nav-typography";
 
 function MenuSkeleton() {
   return (
-    <div className="mt-10 animate-pulse space-y-4">
+    <div className="mt-14 animate-pulse space-y-4">
       <div className="h-12 rounded-2xl bg-white/10" />
       <div className="h-64 rounded-3xl bg-white/10" />
     </div>
@@ -118,29 +119,28 @@ export function InteractiveMenu() {
       className="w-full min-w-0 max-w-full overflow-x-hidden scroll-mt-[calc(var(--nav-h)+16px)] bg-charcoal py-24"
     >
       <div className="mx-auto w-full min-w-0 max-w-[1400px] overflow-x-hidden px-5 sm:px-8">
-        <div className="w-full min-w-0 max-w-full rounded-2xl border border-white/10 bg-black/40 p-4 outline-none sm:p-5 md:rounded-3xl md:p-10">
-          <div
-            id="menu-start"
-            tabIndex={-1}
-            className="w-full min-w-0 max-w-full outline-none focus:outline-none"
-          >
-            <SectionHeading
-              kicker="Menu"
-              title="Auténtico Sazón Mexicano."
-              subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
-            />
-          </div>
+        <div
+          id="menu-start"
+          tabIndex={-1}
+          className="w-full min-w-0 max-w-full outline-none focus:outline-none"
+        >
+          <SectionHeading
+            kicker="Menu"
+            title="Auténtico Sazón Mexicano."
+            subtitle="Hamburguesas with fries, tacos, tortas, antojitos, kids picks, and drinks. Prices follow when confirmed; until then you will see Price TBD."
+          />
+        </div>
 
-          {error ? (
-            <p className="mt-6 rounded-xl border border-salsa/40 bg-salsa/10 p-4 text-sm text-cream">
-              {error} — refresh the page. If this persists, the menu API may be unreachable.
-            </p>
-          ) : null}
+        {error ? (
+          <p className="mt-6 rounded-xl border border-salsa/40 bg-salsa/10 p-4 text-sm text-cream">
+            {error} — refresh the page. If this persists, the menu API may be unreachable.
+          </p>
+        ) : null}
 
-          {loading || !data ? (
-            <MenuSkeleton />
-          ) : (
-            <div className="mt-10 grid w-full min-w-0 max-w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
+        {loading || !data ? (
+          <MenuSkeleton />
+        ) : (
+          <div className="mt-14 grid w-full min-w-0 max-w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]">
             <div className="min-w-0 w-full max-w-full">
               <div
                 className={cn(
@@ -190,7 +190,7 @@ export function InteractiveMenu() {
                 </div>
                 {showSwipeCue ? (
                   <div
-                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-[#0a0a0a] from-[18%] to-transparent lg:hidden"
+                    className="pointer-events-none absolute inset-y-0 right-0 z-[1] w-14 bg-gradient-to-l from-charcoal from-[18%] to-transparent lg:hidden"
                     aria-hidden
                   />
                 ) : null}
@@ -212,9 +212,7 @@ export function InteractiveMenu() {
                   >
                     <div className="grid min-w-0 w-full max-w-full grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr]">
                       <div className="min-w-0 w-full max-w-full">
-                        <p className="text-xs uppercase tracking-editorial text-cream/60">
-                          {active.number} / {active.label}
-                        </p>
+                        <p className={navPrimaryLinkClass}>{active.number} / {active.panelKickerEn}</p>
                         <h3 className="mt-2 font-display text-4xl text-cream">{active.label}</h3>
                         <p className="mt-4 text-sm leading-relaxed text-cream/75 sm:text-base">
                           {active.subtitle}
@@ -309,9 +307,8 @@ export function InteractiveMenu() {
                 ) : null}
               </AnimatePresence>
             </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <WeekendBreakfastSection />
       </div>

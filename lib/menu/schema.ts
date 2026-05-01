@@ -31,6 +31,8 @@ export type MenuItem = {
 export type MenuCategoryMeta = {
   id: string;
   label: string;
+  /** Small "01 / …" line above the category title (English, nav-sized). */
+  panelKickerEn: string;
   subtitle: string;
   color: MenuCategoryColor;
   number: string;
