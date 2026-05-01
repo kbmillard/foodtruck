@@ -25,9 +25,9 @@ export function Prologue() {
       <div className="pointer-events-none absolute inset-0 bg-charcoal" aria-hidden />
 
       {/* Big logo “plate” (hero parity): must sit UNDER light washes or 12% opacity + 3× charcoal layers reads as flat black */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-        {/* Shift down so circular type at top of mark stays inside overflow clip */}
-        <div className="relative aspect-square w-[min(165vw,72rem)] translate-y-[10%] sm:w-[min(150vw,80rem)] sm:translate-y-[12%] md:translate-y-[14%]">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden pt-[var(--nav-h)]">
+        {/* Shift down: % of box height + room for fixed header when section meets viewport top */}
+        <div className="relative aspect-square w-[min(165vw,72rem)] translate-y-[24%] sm:w-[min(150vw,80rem)] sm:translate-y-[28%] md:translate-y-[32%]">
           <Image
             src={LOGO}
             alt=""
