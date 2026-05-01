@@ -26,7 +26,8 @@ export function Prologue() {
 
       {/* Big logo “plate” (hero parity): must sit UNDER light washes or 12% opacity + 3× charcoal layers reads as flat black */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden">
-        <div className="relative aspect-square w-[min(165vw,72rem)] sm:w-[min(150vw,80rem)]">
+        {/* Shift down so circular type at top of mark stays inside overflow clip */}
+        <div className="relative aspect-square w-[min(165vw,72rem)] translate-y-[10%] sm:w-[min(150vw,80rem)] sm:translate-y-[12%] md:translate-y-[14%]">
           <Image
             src={LOGO}
             alt=""
